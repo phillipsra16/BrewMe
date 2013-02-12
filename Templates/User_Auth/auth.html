@@ -1,0 +1,27 @@
+//Templates/User_auth
+<!Doctype html>
+<head>
+    <title>Log in</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <style>
+        body {
+            font-family:Helvetica,sans-serif;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    {{ state }}
+    <form action="/login/" method="post">
+        {% if next %}
+        <input type="hidden" name="next" value="{{ next }}" />
+        {% endif %}
+        username: 
+        <input type="text" name="username" value="{{ username }}" /><br />
+        password:
+        <input type="password" name="password" value="{{ password }}" /><br />
+
+        <input type="submit" value="Log In" />
+    </form>
+</body>
+</html>
