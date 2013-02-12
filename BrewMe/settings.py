@@ -103,9 +103,7 @@ ROOT_URLCONF = 'BrewMe.urls'
 WSGI_APPLICATION = 'BrewMe.wsgi.application'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+        '/home/wyattpj/dev/BrewMe/Templates/User_Auth'
 )
 
 INSTALLED_APPS = (
