@@ -20,8 +20,11 @@
         <input type="text" name="username" value="{{ username }}" /><br />
         password:
         <input type="password" name="password" value="{{ password }}" /><br />
-
         <input type="submit" value="Log In" />
+    </form>
+    
+    <form action="/login/create" method="get">
+        <input type="submit" value="Create A New User"/>
     </form>
 </body>
 </html>

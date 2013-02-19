@@ -8,6 +8,6 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
 
-    (r'^login/$', 'User_Auth.views.user_login'),
+   url(r'^login/', include('User_Auth.urls')),
 
 )
