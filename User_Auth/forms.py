@@ -27,3 +27,11 @@ class RegistrationForm(forms.Form):
             return username
 
         raise forms.ValidationError('Username is already taken.')
+
+class LoginForm(forms.Form):
+    username = forms.CharField(label='Username', max_length=32)
+    password = forms.CharField(
+            label='Password',
+            widget=forms.PasswordInput()
+            )
+

@@ -9,45 +9,38 @@ from django.http import HttpResponseRedirect
 
 # User login view
 def user_login(request):
-    if request.user.is_authenticated():
-        u = 1
-        #Do something, probably redirect
+    state = username = password = ''
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        username = request.POST.get('username')
+        password = request.POST.get('password') + \
+                'and boom goes the dynamite'
+        user = authenticate(username=username, password=password)
 
-    else:
-        state = 'Please log in below'
-        # Instantiate these variables to null
-        username = password = ''
-        # If the request is type 'POST'
-        if request.method == 'POST':
-            # Set Username and pass
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            # Use django's built in authentication method
-            user = authenticate(username=username, password=password)
-
-            # Handle the various cases
-            if user is not None:
-                if user.is_active:
-                    login(request, user)
-                    state = "You're successfully logged in!"
-                else:
-                    state = "Your account is not active"
-
+        # Handle the various cases
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                state = "You're successfully logged in!"
             else:
-                state = "Username and/or Password incorrect"
+                state = "Your account is not active"
 
-        #If the request is type 'GET'
-        if request.method == 'GET':
-            state = 'Create a User'
-            return render_to_response('user_create.html', {
-                'state' : state,
-                })
+        else:
+            state = "Username and/or Password incorrect"
 
-        # Send back a response
-        return render_to_response('auth.html', {
-            'state' : state,
-            'username' : username,
-            })
+    if state == '':
+        state = 'Please Log in'
+        form = LoginForm()
+
+
+    # Send back a response
+    return render_to_response('user_login.html', {
+        'state' : state,
+        'username' : username,
+        'form' : form
+        }, context_instance=RequestContext(request))
+
+
 
 def user_create(request):
     #Do something
@@ -63,7 +56,8 @@ def user_create(request):
             if cont:
                 user = User.objects.create_user(
                         username=form.data['username'],
-                        password=form.data['password1'],
+                        password=form.data['password1'] + \
+                        'and boom goes the dynamite',
                         email=form.data['email']
                         )
                 return HttpResponseRedirect('/login/')
