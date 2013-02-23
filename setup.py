@@ -14,6 +14,7 @@ if __name__ == '__main__':
                 MySQL-python
                 django_admin_bootstrapped
                 South
+                django-bootstrap-toolkit
             """,
             include_package_data=True,
         )

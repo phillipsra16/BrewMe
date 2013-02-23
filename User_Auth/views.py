@@ -11,13 +11,19 @@ from django.http import HttpResponseRedirect
 def user_login(request):
     #initialize all of the variables used to null
     state = username = password = ''
+
+    if request.session['user_id']:
+        HttpResponseRedirect('/home/')
+
     #if view was called with POST request (log in was pressed)
     if request.method == 'POST':
         form = LoginForm(request.POST)
         #set the username and password to use with Django's
         #built in authenticate method
         username = request.POST.get('username')
-        password = request.POST.get('password') + \
+        password = request.POST.get('password')
+        if password:
+            password = password + \
                 'and boom goes the dynamite'
         user = authenticate(username=username, password=password)
 

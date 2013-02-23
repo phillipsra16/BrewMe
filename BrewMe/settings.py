@@ -103,6 +103,7 @@ ROOT_URLCONF = 'BrewMe.urls'
 WSGI_APPLICATION = 'BrewMe.wsgi.application'
 
 TEMPLATE_DIRS = (
+        '/home/wyattpj/dev/BrewMe/Templates',
         '/home/wyattpj/dev/BrewMe/Templates/User_Auth',
         '/home/wyattpj/dev/BrewMe/Templates/Home_Screen'
 )
@@ -116,7 +117,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'south',
-    'User_Auth'
+    'User_Auth',
+    'bootstrap_toolkit'
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
@@ -151,4 +153,9 @@ LOGGING = {
 }
 
 # Used by login_required decorator
+BOOTSTRAP_BASE_URL      = 'http://twitter.github.com/bootstrap/assets/'
+BOOTSTRAP_CSS_BASE_URL  = BOOTSTRAP_BASE_URL + 'css/'
+BOOTSTRAP_CSS_URL       = BOOTSTRAP_CSS_BASE_URL + 'bootstrap.css'
+BOOTSTRAP_JS_BASE_URL   = BOOTSTRAP_BASE_URL + 'js/'
 LOGIN_URL = '/login/'
+
