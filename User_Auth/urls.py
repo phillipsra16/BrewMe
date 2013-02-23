@@ -10,4 +10,5 @@ urlpatterns = patterns('User_Auth.views',
     # url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'user_login'),
     url(r'^create/$', 'user_create'),
+    url(r'^logout/$', 'user_logout'),
 )

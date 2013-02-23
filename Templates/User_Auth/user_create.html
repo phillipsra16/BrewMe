@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load bootstrap_toolkit %}
+{% block content %}
+    {{ state }}
+    <form action="/login/create/" method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="submit"/>
+    </form>
+{% endblock %}

@@ -1,6 +1,7 @@
 # User_Authentication views
 from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, login
+from django.contrib import auth
 from django.contrib.auth.models import User
 from django import forms
 from User_Auth.forms import *
@@ -12,8 +13,8 @@ def user_login(request):
     #initialize all of the variables used to null
     state = username = password = ''
 
-    if request.session['user_id']:
-        HttpResponseRedirect('/home/')
+    if request.user.is_authenticated():
+        return HttpResponseRedirect('/home/')
 
     #if view was called with POST request (log in was pressed)
     if request.method == 'POST':
@@ -52,6 +53,9 @@ def user_login(request):
         'form' : form
         }, context_instance=RequestContext(request))
 
+def user_logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect('/login/')
 
 
 def user_create(request):
