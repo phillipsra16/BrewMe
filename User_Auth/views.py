@@ -25,7 +25,8 @@ def user_login(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                state = "You're successfully logged in!"
+                request.session['user_id'] = user.id
+                return HttpResponseRedirect('/home/');
             else:
                 state = "Your account is not active"
 

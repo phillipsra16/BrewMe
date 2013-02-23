@@ -103,7 +103,8 @@ ROOT_URLCONF = 'BrewMe.urls'
 WSGI_APPLICATION = 'BrewMe.wsgi.application'
 
 TEMPLATE_DIRS = (
-        '/home/wyattpj/dev/BrewMe/Templates/User_Auth'
+        '/home/wyattpj/dev/BrewMe/Templates/User_Auth',
+        '/home/wyattpj/dev/BrewMe/Templates/Home_Screen'
 )
 
 INSTALLED_APPS = (
@@ -148,3 +149,6 @@ LOGGING = {
         },
     }
 }
+
+# Used by login_required decorator
+LOGIN_URL = '/login/'
