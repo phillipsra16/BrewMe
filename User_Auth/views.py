@@ -82,7 +82,7 @@ def user_create(request):
                         'and boom goes the dynamite',
                         email=form.data['email']
                         )
-                return HttpResponseRedirect('/user/login/')
+                return HttpResponseRedirect('/user')
         else:
             state = "Passwords don't match"
     #If starting state
