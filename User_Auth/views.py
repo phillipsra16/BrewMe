@@ -97,16 +97,46 @@ def user_create(request):
 
 @login_required
 def user_settings(request):
+    # initialize variables
     state = username = ''
+    # if submit triggered the view
     if request.method == 'POST':
-        form = SettingsForm(request.POST)
-        email = form.data['email']
+        # get our user and the submit type
+        user_id = request.session['user_id']
+        user = User.objects.get(id = user_id)
+        submit_type = request.POST.get('type','nonefound')
+        # update email
+        if submit_type == 'Change Email':
+            new_email = request.POST.get('email','')
+            if new_email:
+                user.email = new_email
+                user.save()
+                state = 'Email changed to ' + user.email
+            else:
+                state = 'Please submit a valid email address'
+        # update password //NEED TO REIMPLEMENT THIS
+        elif submit_type == 'Change Password':
+            if user.password == request.POST['password_current'] + \
+                    'and boom goes the dynamite':
+                if request.POST['password1'] == request.POST['password2']:
+                    user.password = request.POST['password1'] + \
+                            'and boom goes the dynamite'
+                    user.save()
+                    state = 'Password saved'
+                else:
+                    state = "Passwords don't match"
+            else:
+                state = 'Password incorrect'
+    # Set our defaults
     else:
-        form = SettingsForm()
-        state = 'no'
-
+        state = ''
+    email_form = EmailForm()
+    password_form = PasswordForm()
+    image_form = ImageForm()
     return render_to_response('user_settings.html', {
         'state' : state,
         'username' : username,
-        'form' : form,
+        'email_form' : email_form,
+        'password_form' : password_form,
+        'image_form' : image_form,
         }, context_instance=RequestContext(request))

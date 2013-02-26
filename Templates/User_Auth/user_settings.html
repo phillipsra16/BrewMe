@@ -3,7 +3,17 @@
 {% block content %}
     {{ state }}
     <form action="/user/settings/" method="post" class="form-horizontal">{% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Save Changes"/>
+        {{ email_form.as_p }}
+        <input type="submit" name="type" value="Change Email"/>
+    </form>
+
+    <form action="/user/settings/" method="post" class="form-horizontal">{% csrf_token %}
+        {{ password_form.as_p }}
+        <input type="submit" name="type" value="Change Password"/>
+    </form>
+
+    <form action="/user/settings/" method="post" class="form-horizontal">{% csrf_token %}
+        {{ image_form.as_p }}
+        <input type="submit" name="type" value="Change Avatar"/>
     </form>
 {% endblock %}

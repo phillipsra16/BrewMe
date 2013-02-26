@@ -11,7 +11,7 @@ def home(request):
     if state == '':
         state = 'Welcome!'
         uid = request.session['user_id']
-        username = User.objects.get(id=uid)
+        username = User.objects.get(id = uid)
 
     return render_to_response('home.html', {
         'state' : state,

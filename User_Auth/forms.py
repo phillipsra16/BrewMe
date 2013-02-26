@@ -36,16 +36,23 @@ class LoginForm(forms.Form):
             widget=forms.PasswordInput()
             )
 
-class SettingsForm(forms.Form):
-    class Meta:
-        model = UserProfile
-        exclude = ('User')
+class EmailForm(forms.Form):
     email = forms.EmailField(label='Email')
+
+class ImageForm(forms.Form):
+    image = forms.ImageField(label='Avatar')
+
+class PasswordForm(forms.Form):
+    password_current = forms.CharField(
+            label='Password',
+            widget=forms.PasswordInput()
+            )
     password1 = forms.CharField(
-            label='Change Password',
+            label='New Password',
             widget=forms.PasswordInput()
             )
     password2 = forms.CharField(
-            label='Confirm Password',
+            label='Confirm New Password',
             widget=forms.PasswordInput()
             )
+
