@@ -90,7 +90,7 @@ class MiscBill(models.Model):
     time = models.TimeField()
     amount = models.DecimalField(max_digits=8,
                                   decimal_places=2)
-    use = models.CharField(max_length=128)
+    use = models.IntegerField()
 
     def __unicode__(self):
         return self.name
