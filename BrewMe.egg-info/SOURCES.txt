@@ -13,6 +13,9 @@ Home_Screen/models.py
 Home_Screen/tests.py
 Home_Screen/urls.py
 Home_Screen/views.py
+Recipe/__init__.py
+Recipe/tests.py
+Recipe/views.py
 User_Auth/__init__.py
 User_Auth/forms.py
 User_Auth/models.py
@@ -21,4 +24,5 @@ User_Auth/urls.py
 User_Auth/views.py
 User_Auth/migrations/0001_initial.py
 User_Auth/migrations/0002_initial.py
+User_Auth/migrations/0003_auto__add_userprofile.py
 User_Auth/migrations/__init__.py

@@ -2,12 +2,12 @@
 {% load bootstrap_toolkit %}
 {% block content %}
     {{ state }}
-    <form action="/login/" method="post" class="form-horizontal">{% csrf_token %}
+    <form action="/user/" method="post" class="form-horizontal">{% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Log in"/>
     </form>
     
-    <form action="/login/create" method="get">
+    <form action="/user/create" method="get">
         <input type="submit" value="Create A New User"/>
     </form>
 {% endblock %}

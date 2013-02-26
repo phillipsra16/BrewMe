@@ -2,8 +2,8 @@
 {% load bootstrap_toolkit %}
 {% block content %}
     {{ state }}
-    <form action="/user/create/" method="post">{% csrf_token %}
+    <form action="/user/settings/" method="post" class="form-horizontal">{% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="submit"/>
+        <input type="submit" value="Save Changes"/>
     </form>
 {% endblock %}

@@ -7,6 +7,7 @@ from django import forms
 from User_Auth.forms import *
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
 # User login view
 def user_login(request):
@@ -33,7 +34,7 @@ def user_login(request):
             if user.is_active:
                 login(request, user)
                 request.session['user_id'] = user.id
-                return HttpResponseRedirect('/home/');
+                return HttpResponseRedirect('/home/')
             else:
                 state = "Your account is not active"
 
@@ -55,7 +56,7 @@ def user_login(request):
 
 def user_logout(request):
     auth.logout(request)
-    return HttpResponseRedirect('/login/')
+    return HttpResponseRedirect('/user')
 
 
 def user_create(request):
@@ -81,15 +82,31 @@ def user_create(request):
                         'and boom goes the dynamite',
                         email=form.data['email']
                         )
-                return HttpResponseRedirect('/login/')
+                return HttpResponseRedirect('/user/login/')
         else:
             state = "Passwords don't match"
     #If starting state
     else:
         state = 'Create an Account'
         form = RegistrationForm()
-    #Render response based on context
+    #Render response based on intext
     return render_to_response('user_create.html', {
             'state' : state,
             'form' : form,
             }, context_instance=RequestContext(request))
+
+@login_required
+def user_settings(request):
+    state = username = ''
+    if request.method == 'POST':
+        form = SettingsForm(request.POST)
+        email = form.data['email']
+    else:
+        form = SettingsForm()
+        state = 'no'
+
+    return render_to_response('user_settings.html', {
+        'state' : state,
+        'username' : username,
+        'form' : form,
+        }, context_instance=RequestContext(request))

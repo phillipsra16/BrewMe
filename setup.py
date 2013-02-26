@@ -15,6 +15,7 @@ if __name__ == '__main__':
                 django_admin_bootstrapped
                 South
                 django-bootstrap-toolkit
+                pil
             """,
             include_package_data=True,
         )
