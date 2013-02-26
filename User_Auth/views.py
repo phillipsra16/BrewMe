@@ -24,9 +24,6 @@ def user_login(request):
         #built in authenticate method
         username = request.POST.get('username')
         password = request.POST.get('password')
-        if password:
-            password = password + \
-                'and boom goes the dynamite'
         user = authenticate(username=username, password=password)
 
         # Handle the various cases
@@ -76,12 +73,13 @@ def user_create(request):
             #Create our user object with Django ORM
             #and redirect to login page upon success
             if cont:
+                passwd = form.data['password1']
                 user = User.objects.create_user(
                         username=form.data['username'],
-                        password=form.data['password1'] + \
-                        'and boom goes the dynamite',
-                        email=form.data['email']
+                        email=form.data['email'],
                         )
+                user.set_password(passwd)
+                user.save()
                 return HttpResponseRedirect('/user')
         else:
             state = "Passwords don't match"
@@ -102,8 +100,6 @@ def user_settings(request):
     # if submit triggered the view
     if request.method == 'POST':
         # get our user and the submit type
-        user_id = request.session['user_id']
-        user = User.objects.get(id = user_id)
         submit_type = request.POST.get('type','nonefound')
         # update email
         if submit_type == 'Change Email':
@@ -116,17 +112,12 @@ def user_settings(request):
                 state = 'Please submit a valid email address'
         # update password //NEED TO REIMPLEMENT THIS
         elif submit_type == 'Change Password':
-            if user.password == request.POST['password_current'] + \
-                    'and boom goes the dynamite':
-                if request.POST['password1'] == request.POST['password2']:
-                    user.password = request.POST['password1'] + \
-                            'and boom goes the dynamite'
-                    user.save()
-                    state = 'Password saved'
-                else:
-                    state = "Passwords don't match"
+            if request.POST['password1'] == request.POST['password2']:
+                user.set_password(request.POST['password1'])
+                user.save()
+                state = 'Password saved'
             else:
-                state = 'Password incorrect'
+                state = "Passwords don't match"
     # Set our defaults
     else:
         state = ''
