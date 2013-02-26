@@ -1,0 +1,7 @@
+Django==1.4.3
+ipython==0.13.1
+MySQL-python
+django_admin_bootstrapped
+South
+django-bootstrap-toolkit
+pil

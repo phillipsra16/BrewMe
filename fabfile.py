@@ -6,7 +6,7 @@ def prepare_deployment(branch_name):
 
 def deploy():
     with lcd('/home/deployer/BrewMe'):
-        local('git pull /home/wyattpj/dev/BrewMe')
+        local('git pull github master')
         local('python manage.py migrate BrewMe')
         local('python manage.py test BrewMe')
         local('python manage.py runserver 0.0.0.0:8000')

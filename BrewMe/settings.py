@@ -118,7 +118,9 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'south',
     'User_Auth',
-    'bootstrap_toolkit'
+    'bootstrap_toolkit',
+    'Recipe',
+    'Home_Screen',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
@@ -152,9 +154,9 @@ LOGGING = {
     }
 }
 
-# Used by login_required decorator
 BOOTSTRAP_BASE_URL      = 'http://twitter.github.com/bootstrap/assets/'
 BOOTSTRAP_CSS_BASE_URL  = BOOTSTRAP_BASE_URL + 'css/'
 BOOTSTRAP_CSS_URL       = BOOTSTRAP_CSS_BASE_URL + 'bootstrap.css'
 BOOTSTRAP_JS_BASE_URL   = BOOTSTRAP_BASE_URL + 'js/'
+# Used by login_required decorator
 LOGIN_URL = '/user/'
