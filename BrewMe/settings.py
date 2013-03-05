@@ -105,7 +105,8 @@ WSGI_APPLICATION = 'BrewMe.wsgi.application'
 TEMPLATE_DIRS = (
         '/home/wyattpj/dev/BrewMe/Templates',
         '/home/wyattpj/dev/BrewMe/Templates/User_Auth',
-        '/home/wyattpj/dev/BrewMe/Templates/Home_Screen'
+        '/home/wyattpj/dev/BrewMe/Templates/Home_Screen',
+        '/home/wyattpj/dev/BrewMe/Templates/Recipe',
 )
 
 INSTALLED_APPS = (
@@ -166,7 +167,7 @@ LOGIN_URL = '/user/'
 
 # Used by django-ajax-selects app
 AJAX_LOOKUP_CHANNELS = {
-        'hops' : {'model' : 'Recipe.Hops', 'search_field' : 'name'}
+        'Hop Variety' : {'model' : 'Recipe.Hops', 'search_field' : 'name'}
         }
 AJAX_SELECT_BOOTSTRAP = True
 AJAX_SELECT_INLINES = 'inline'

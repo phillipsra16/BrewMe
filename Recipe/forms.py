@@ -22,17 +22,17 @@ class HopForm(forms.Form):
 		     max_digits=3, decimal_places=1)
 
 class YeastForm(forms.Form):
-	name = models.CharField(label="Yeast",
+	name = forms.CharField(label="Yeast",
 		max_length=128)
-	description = models.CharField(label="Description",
+	description = forms.CharField(label="Description",
 		max_length=128)
-	flocullation = models.CharField(label="Flocculation",
+	flocullation = forms.CharField(label="Flocculation",
 		max_length=128)
-	attenuation = models.IntegerField(label="Attenuation")
+	attenuation = forms.IntegerField(label="Attenuation")
 
 class MiscForm(forms.Form):
-	name = models.CharField(label="Ingredient", max_length=128)
-	description = models.CharField(label="Description",
+	name = forms.CharField(label="Ingredient", max_length=128)
+	description = forms.CharField(label="Description",
 		max_length=128)
 	time = forms.IntegerField(label="Time") # in minutes
 	amount = forms.DecimalField(label="Amount (oz)",
@@ -40,4 +40,4 @@ class MiscForm(forms.Form):
 	use = forms.CharField(label="Use", max_length=128)
 	
 class CommentForm(forms.Form):
-	text = models.CharField(label="Comment", max_length=1024)
+	text = forms.CharField(label="Comment", max_length=1024)

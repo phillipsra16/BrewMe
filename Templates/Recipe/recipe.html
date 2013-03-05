@@ -1,8 +1,17 @@
 {% extends "base.html" %}
-{% load bootstrap_tookit %}
+{% load bootstrap_toolkit %}
 {% block content %}
 
 	<form>{% csrf_token %}
-		{{ form.as_p }}
+		{{ hop_form.as_p }}
+	</form>
+	<form>{% csrf_token %}
+		{{ fermentable_form.as_p }}
+	</form>
+	<form>{% csrf_token %}
+		{{ yeast_form.as_p }}
+	</form>
+	<form>{% csrf_token %}
+		{{ misc_form.as_p }}
 	</form>
 {% endblock %} 

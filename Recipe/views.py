@@ -2,16 +2,18 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django import forms
+from django.template import RequestContext
+from Recipe.forms import *
 
 @login_required
 def recipe_design(request):
     state = ''
-    fermentation_form = hop_form = yeast_form = misc_form = ''
+    fermentable_form = hop_form = yeast_form = misc_form = ''
 
     # Data being submitted
     # This will either be via editing or creating a recipe
     if request.method == 'POST':
-            fermentation_form = FermentationForm();
+            fermentable_form = FermentationForm();
             hop_form = HopForm();
             yeast_form = YeastForm();
             misc_form = MiscForm();
@@ -29,20 +31,20 @@ def recipe_design(request):
         forms = request.GET.get('form', '')
         # Pre fill forms
         if forms is not None:
-            fermentation_form = request.GET#.get('fermentables','')
+            fermentable_form = request.GET#.get('fermentables','')
             hop_form = request.GET#.get('hops','')
             yeast_form = request.GET#.get('yeast','')
             misc_form = request.GET#.get('misc','')
         # Return blank forms
-        else:
-            fermentation_form = FermentationForm();
-            hop_form = HopForm();
-            yeast_form = YeastForm();
-            misc_form = MiscForm();
+        #else:
+    fermentable_form = FermentableForm();
+    hop_form = HopForm();
+    yeast_form = YeastForm();
+    misc_form = MiscForm();
     # Render above objects to a response and send it off
-    return render_to_response('recipe_design.html', {
+    return render_to_response('recipe.html', {
         'hop_form' : hop_form,
-        'fermentation_form' : fermentation_form,
+        'fermentable_form' : fermentable_form,
         'yeast_form' : yeast_form,
         'misc_form' : misc_form,
         }, context_instance=RequestContext(request))
