@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load bootstrap_toolkit %}
 {% block content %}
-
+{{ state }}
 	<form>{% csrf_token %}
 		{{ hop_form.as_p }}
 	</form>

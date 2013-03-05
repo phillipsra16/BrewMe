@@ -10,7 +10,7 @@ class FermentableForm(forms.Form):
 	color = forms.IntegerField(label="Color (L)")
 	use = forms.CharField(label="Use", max_length=128)
 
-class HopForm(forms.Form):
+"""class HopForm(forms.Form):
 	time = forms.IntegerField(label="Time") # in minutes
 	amount = forms.DecimalField(label="Amount (oz)",
 		 max_digits=4, decimal_places=2)
@@ -19,7 +19,7 @@ class HopForm(forms.Form):
 		required=False, help_text=None,
 		plugin_options = {'autoFocus':True,'minLength':4})
 	alpha_acid = forms.DecimalField("Alpha Acid",
-		     max_digits=3, decimal_places=1)
+		     max_digits=3, decimal_places=1)"""
 
 class YeastForm(forms.Form):
 	name = forms.CharField(label="Yeast",

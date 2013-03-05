@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django import forms
 from django.template import RequestContext
 from Recipe.forms import *
+from Recipe.models import *
 
 @login_required
 def recipe_design(request):
@@ -30,7 +31,7 @@ def recipe_design(request):
         # Check if we need to prefill forms
         forms = request.GET.get('form', '')
         # Pre fill forms
-        if forms is not None:
+        if forms:
             fermentable_form = request.GET#.get('fermentables','')
             hop_form = request.GET#.get('hops','')
             yeast_form = request.GET#.get('yeast','')
@@ -39,6 +40,8 @@ def recipe_design(request):
         #else:
     fermentable_form = FermentableForm();
     hop_form = HopForm();
+    if hop_form:
+        state = 'form found'
     yeast_form = YeastForm();
     misc_form = MiscForm();
     # Render above objects to a response and send it off
@@ -47,4 +50,5 @@ def recipe_design(request):
         'fermentable_form' : fermentable_form,
         'yeast_form' : yeast_form,
         'misc_form' : misc_form,
+        'state' : state,
         }, context_instance=RequestContext(request))
