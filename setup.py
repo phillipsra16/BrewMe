@@ -16,6 +16,8 @@ if __name__ == '__main__':
                 South
                 django-bootstrap-toolkit
                 pil
+                fabric
+                django-ajax-selects
             """,
             include_package_data=True,
         )

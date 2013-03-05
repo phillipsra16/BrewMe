@@ -121,6 +121,7 @@ INSTALLED_APPS = (
     'bootstrap_toolkit',
     'Recipe',
     'Home_Screen',
+    'ajax_select',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
@@ -154,9 +155,18 @@ LOGGING = {
     }
 }
 
+# Static bootstrap urls
 BOOTSTRAP_BASE_URL      = 'http://twitter.github.com/bootstrap/assets/'
 BOOTSTRAP_CSS_BASE_URL  = BOOTSTRAP_BASE_URL + 'css/'
 BOOTSTRAP_CSS_URL       = BOOTSTRAP_CSS_BASE_URL + 'bootstrap.css'
 BOOTSTRAP_JS_BASE_URL   = BOOTSTRAP_BASE_URL + 'js/'
+
 # Used by login_required decorator
 LOGIN_URL = '/user/'
+
+# Used by django-ajax-selects app
+AJAX_LOOKUP_CHANNELS = {
+        'hops' : {'model' : 'Recipe.Hops', 'search_field' : 'name'}
+        }
+AJAX_SELECT_BOOTSTRAP = True
+AJAX_SELECT_INLINES = 'inline'
