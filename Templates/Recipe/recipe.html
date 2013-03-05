@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load bootstrap_tookit %}
+{% block content %}
+
+	<form>{% csrf_token %}
+		{{ form.as_p }}
+	</form>
+{% endblock %} 

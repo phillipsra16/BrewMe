@@ -37,10 +37,10 @@ class Fermentable(models.Model):
 
 class Hop(models.Model):
     name = models.CharField(max_length=128)
-    alpha_acid = models.DecimalField(max_digits=6,
-                                     decimal_places=3)
+    alpha_acid = models.DecimalField(max_digits=3,
+                                     decimal_places=1)
     description = models.CharField(max_length=128)
-    use = models.IntegerField()
+    use = models.CharField(max_length=128)
 
     def __unicode__(self):
         return self.name
@@ -48,10 +48,8 @@ class Hop(models.Model):
 class Yeast(models.Model):
     name = models.CharField(max_length=128)
     description = models.CharField(max_length=128)
-    flocculation = models.DecimalField(max_digits=6,
-                                       decimal_places=3)
-    attenuation = models.DecimalField(max_digits=6,
-                                      decimal_places=3)
+    flocculation = models.CharField(max_length=128)
+    attenuation = models.IntegerField()
 
     def __unicode__(self):
         return self.name
@@ -79,8 +77,8 @@ class GrainBill(models.Model):
 class HopSchedule(models.Model):
     recipe_id = models.ForeignKey(Recipe)
     hop_id = models.ForeignKey(Hop)
-    time = models.TimeField()
-    amount = models.DecimalField(max_digits=8,
+    time = models.IntegerField() # in minutes
+    amount = models.DecimalField(max_digits=4,
                                   decimal_places=2)
     use = models.IntegerField()
 
