@@ -14,8 +14,10 @@ Home_Screen/tests.py
 Home_Screen/urls.py
 Home_Screen/views.py
 Recipe/__init__.py
+Recipe/forms.py
 Recipe/models.py
 Recipe/tests.py
+Recipe/urls.py
 Recipe/views.py
 Recipe/migrations/0001_initial.py
 Recipe/migrations/0002_auto__add_field_recipe_parent_id.py

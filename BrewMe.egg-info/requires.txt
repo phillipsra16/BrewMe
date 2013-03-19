@@ -5,3 +5,6 @@ django_admin_bootstrapped
 South
 django-bootstrap-toolkit
 pil
+fabric
+django-ajax-selects
+django-autocomplete-light

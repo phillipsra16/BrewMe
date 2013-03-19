@@ -169,5 +169,3 @@ LOGIN_URL = '/user/'
 AJAX_LOOKUP_CHANNELS = {
         'Hop Variety' : {'model' : 'Recipe.Hops', 'search_field' : 'name'}
         }
-AJAX_SELECT_BOOTSTRAP = True
-AJAX_SELECT_INLINES = 'inline'
