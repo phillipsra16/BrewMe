@@ -1,6 +1,30 @@
 {% extends "base.html" %}
 {% load bootstrap_toolkit %}
 {% block extra_head %}
+<style>
+    form{
+        width: 100%;
+    }
+    label{
+        display: block;
+        float: left;
+    }
+    input{
+        max-width: 10%;
+        display: block;
+        float: left;
+    }
+    select{
+        display: block;
+        float:left;
+    }
+    #fermentable_row {
+    }
+    #yeast_row {
+    }
+    #misc_row {
+    }
+</style>
 <script>
 function id_from_name(selector_name) {
     switch(selector_name) {
@@ -70,17 +94,25 @@ $(document).ajaxSend(function(event, xhr, settings) {
 {% endblock %}
 {% block content %}
 {{ state }}
-    <div id='template' style="visibility:hidden; float:right;"></div>
-    <form>{% csrf_token %}
+<div id='template' style="visibility:hidden; float:right;"></div>
+    <div id='hop_box' class='span12 well'>
+    <form id='hop_row'>{% csrf_token %}
 		{{ hop_form.as_p }}
-	</form>
-	<form>{% csrf_token %}
+    </form>
+    </div>
+    <div id='fermentable_box' class='span12 well'>
+	<form id='fermentable_row'>{% csrf_token %}
 		{{ fermentable_form.as_p }}
-	</form>
-	<form>{% csrf_token %}
+    </form>
+    </div>
+    <div id='yeast_box' class='span12 well'>
+	<form id='yeast_row'>{% csrf_token %}
 		{{ yeast_form.as_p }}
-	</form>
-	<form>{% csrf_token %}
+    </form>
+    </div>
+    <div id='misc_box' class='span12 well'>
+	<form id='misc_row'>{% csrf_token %}
 		{{ misc_form.as_p }}
-	</form>
+    </form>
+    </div>
 {% endblock %} 

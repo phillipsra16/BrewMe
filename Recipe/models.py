@@ -49,19 +49,11 @@ class Hop(models.Model):
     def __unicode__(self):
         return self.name
 
-"""class HopForm(ModelForm):
-    class Meta:
-        model = Hop
-    #name = make_ajax_field(Hop, 'name', 'Hop Variety', help_text = None)
-	name = AutoCompleteSelectField("Hop Variety",
-		required=False, help_text=None,
-		plugin_options = {'autoFocus':True,'minLength':4})"""
-
 class Yeast(models.Model):
     name = models.CharField(max_length=128)
     description = models.CharField(max_length=128)
     flocculation = models.CharField(max_length=128)
-    attenuation = models.IntegerField()
+    attenuation = models.CharField(max_length=128)
 
     def __unicode__(self):
         return self.name

@@ -60,6 +60,10 @@ class CommentForm(forms.Form):
 
 
 class HopForm(forms.Form):
+    hop_name = forms.ModelChoiceField(
+            label="Hop Variety",
+            widget=forms.Select(attrs={'class':'selector'}),
+            queryset=Hop.objects.all())
     time = forms.IntegerField(
             label="Time")
     amount = forms.DecimalField(
@@ -71,20 +75,16 @@ class HopForm(forms.Form):
             max_length=128)
     #name = forms.ModelChoiceField(label="Hop Variety",
             #queryset=Hop.objects.all(), class="selector")
-    hop_name = forms.ModelChoiceField(
-            widget=forms.Select(attrs={'class':'selector'}),
-            label="Hop Variety",
-            queryset=Hop.objects.all())
     alpha_acid = forms.DecimalField(
             label="Alpha Acid",
             max_digits=3,
             decimal_places=1)
 
     def serialize_form(self):
-        ser_form = {'time' : str(self['time']),
+        ser_form = {'hop_name' : str(self['hop_name']),
+                    'time' : str(self['time']),
                     'amount' : str(self['amount']),
                     'use' : str(self['use']),
-                    'hop_name' : str(self['hop_name']),
                     'alpha_acid' : str(self['alpha_acid']),}
         return ser_form
 
