@@ -35,6 +35,8 @@ class Fermentable(models.Model):
     potential_extract = models.DecimalField(max_digits=6,
                                             decimal_places=3)
     use = models.CharField(max_length=128)
+    description = models.CharField(max_length=256,
+                                   null=True)
 
     def __unicode__(self):
         return self.name

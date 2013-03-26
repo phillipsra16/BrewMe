@@ -21,8 +21,10 @@ $(document).ready(function() {
             type:'GET',
             url: url_base + ingre_type + '/' + ingre_id + '/',
             success: function(data) {
-                $('#template').html(data);
-                $('#template').css("visibility", "visible");
+                //TODO: Parse data dict and display beautifully. Here would be a good place to re-use some of the code from the project last semester
+                $('#current_template').html(data);
+                $('#current_template').css("visibility", "visible");
+                $('#sub_' + ingre_type).css("visibility", "visible");
             },
         });
     });
@@ -70,9 +72,10 @@ $(document).ajaxSend(function(event, xhr, settings) {
 {% endblock %}
 {% block content %}
 {{ state }}
-    <div id='template' style="visibility:hidden; float:right;"></div>
-    <form>{% csrf_token %}
-		{{ hop_form.as_p }}
+    <div id='current_template' style="visibility:hidden; float:right;"></div>
+    <form action="/recipe/hop/add" method="post">{% csrf_token %}
+        {{ hop_form.as_p }}
+        <input type="submit" value="Add hop" style="visibility:hidden" id="sub_hop" />
 	</form>
 	<form>{% csrf_token %}
 		{{ fermentable_form.as_p }}
