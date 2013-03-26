@@ -1,8 +1,77 @@
 {% extends "base.html" %}
 {% load bootstrap_toolkit %}
+{% block extra_head %}
+<script>
+function id_from_name(selector_name) {
+    switch(selector_name) {
+        case 'hop_name':
+            return 'hop';
+        default:
+            return 'nothing found';
+    }
+}
+$(document).ready(function() {
+    $('.selector').change(function () {
+        // We are forming our get request name and id here
+        //TODO: Clean this up!
+        var ingre_type = id_from_name($(this).attr('name'));
+        var ingre_id = $(this).children(':selected').val();
+        url_base = 'http://66.169.77.204:8000/recipe/';
+        $.ajax({
+            type:'GET',
+            url: url_base + ingre_type + '/' + ingre_id + '/',
+            success: function(data) {
+                $('#template').html(data);
+                $('#template').css("visibility", "visible");
+            },
+        });
+    });
+});
+
+
+//Django provided ajax send
+$(document).ajaxSend(function(event, xhr, settings) {
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    function sameOrigin(url) {
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+    function safeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
+});
+</script>
+{% endblock %}
 {% block content %}
 {{ state }}
-	<form>{% csrf_token %}
+    <div id='template' style="visibility:hidden; float:right;"></div>
+    <form>{% csrf_token %}
 		{{ hop_form.as_p }}
 	</form>
 	<form>{% csrf_token %}
