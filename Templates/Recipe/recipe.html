@@ -6,7 +6,12 @@ function id_from_name(selector_name) {
     switch(selector_name) {
         case 'hop_name':
             return 'hop';
+        case 'ferm_name':
+            return 'fermentable';
+        case 'yeast_name':
+            return 'yeast';
         default:
+            console.log(selector_name);
             return 'nothing found';
     }
 }
@@ -75,13 +80,15 @@ $(document).ajaxSend(function(event, xhr, settings) {
     <div id='current_template' style="visibility:hidden; float:right;"></div>
     <form action="/recipe/hop/add" method="post">{% csrf_token %}
         {{ hop_form.as_p }}
-        <input type="submit" value="Add hop" style="visibility:hidden" id="sub_hop" />
+        <input type="submit" value="Add Hop" style="visibility:hidden" id="sub_hop" />
 	</form>
 	<form>{% csrf_token %}
 		{{ fermentable_form.as_p }}
+        <input type="submit" value="Add Fermentable" style="visibility:hidden" id="sub_fermentable" />
 	</form>
 	<form>{% csrf_token %}
 		{{ yeast_form.as_p }}
+        <input type="submit" value="Add Yeast" style="visibility:hidden" id="sub_yeast" />
 	</form>
 	<form>{% csrf_token %}
 		{{ misc_form.as_p }}
