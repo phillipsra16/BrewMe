@@ -6,4 +6,8 @@ urlpatterns = patterns('Recipe.views',
         'recipe_design'),
     url(r'^hop/(?P<ing_id>\d+)/$',
         'get_hop'),
+    url(r'^fermentable/(?P<ing_id>\d+)/$',
+        'get_fermentable'),
+    url(r'^yeast/(?P<ing_id>\d+)/$',
+        'get_yeast'),
 )

@@ -57,7 +57,38 @@ def get_hop(request, ing_id):
     # modelchoicefield
     if request.method == 'GET':
         hop = Hop.objects.get(pk = ing_id)
-        hop_dict= { 'use' : str(hop.use),
-                    'hop_name' : str(hop.name),
-                    'alpha_acid' : str(hop.alpha_acid),}
+        hop_dict= { 'use'           : str(hop.use),
+                    'hop_name'      : str(hop.name),
+                    'alpha_acid'    : str(hop.alpha_acid),}
         return HttpResponse(simplejson.dumps(hop_dict))
+
+
+def get_yeast(request, ing_id):
+    # Data being submitted
+    # This will either be via editing or creating a recipe,
+    # or when we are filling out a form via 'onchange event' in the 
+    # modelchoicefield
+    if request.method == 'GET':
+        yeast = Yeast.objects.get(pk = ing_id)
+        yeast_dict= { 'yeast_name'      : str(yeast.description),
+                      'description'     : str(yeast.name),
+                      'flocculation'    : str(yeast.flocculation),
+                      'attenuation'     : str(yeast.attenuation),}
+        return HttpResponse(simplejson.dumps(yeast_dict))
+
+
+def get_fermentable(request, ing_id):
+    # Data being submitted
+    # This will either be via editing or creating a recipe,
+    # or when we are filling out a form via 'onchange event' in the 
+    # modelchoicefield
+    if request.method == 'GET':
+        ferm = Fermentable.objects.get(pk = ing_id)
+        ferm_dict= { 'fermentable_name' : str(ferm.name),
+                     'color'            : str(ferm.color),
+                     'potential'        : str(ferm.potential_extract),
+                     'use'              : str(ferm.use),
+                     'description'      : str(ferm.description),}
+        return HttpResponse(simplejson.dumps(ferm_dict))
+
+
