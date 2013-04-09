@@ -27,13 +27,13 @@
     }
 </style>
 <script>
-function id_from_name(selector_name) {
-    switch(selector_name) {
-        case 'hop_name':
+function id_from_name(object_name) {
+    switch(object_name) {
+        case 'hop_row':
             return 'hop';
-        case 'ferm_name':
+        case 'fermentable_row':
             return 'fermentable';
-        case 'yeast_name':
+        case 'yeast_row':
             return 'yeast';
         default:
             console.log(selector_name);
@@ -41,10 +41,11 @@ function id_from_name(selector_name) {
     }
 }
 $(document).ready(function() {
+    //Method to get ingredient info via AJAX
     $('.selector').change(function () {
         // We are forming our get request name and id here
         //TODO: Clean this up!
-        var ingre_type = id_from_name($(this).attr('name'));
+        var ingre_type = id_from_name($(this).parent().attr('id'));
         var ingre_id = $(this).children(':selected').val();
         url_base = 'http://66.169.77.204:8000/recipe/';
         $.ajax({
@@ -57,6 +58,24 @@ $(document).ready(function() {
                 $('#sub_' + ingre_type).css("visibility", "visible");
             },
         });
+    });
+    $('.adder').submit(function (data) {
+        //Dictionary containing all recipe information
+        recipe = {
+            hop : [], //List of Dictionaries of hop ingredients
+            yeast : [], //List of Dictionaries of yeast ingredients
+            fermentable : [] //List of Dictionaries of fermentable ingredients
+        };
+        var type = $(data).parent().attr('id'); //String to get the List in 'recipe' that we want
+        var ingredient = {};
+        _.each($(data).parent().children(), function (data) {
+            if (data.label == null or data.value == null) {
+                $.alert("Please fill out all the data");
+                return;
+            }
+            ingredient.append(data.label, data.value);
+        });
+        recipe.type.append(ingredient);
     });
 });
 
@@ -104,9 +123,9 @@ $(document).ajaxSend(function(event, xhr, settings) {
 {{ state }}
 <div id='template' style="visibility:hidden; float:right;"></div>
     <div id='hop_box' class='span12 well'>
-    <form action="/recipe/hop/add" method="post" id='hop_row'>{% csrf_token %}
+    <form action="/recipe/hop/add"  id='hop_row'>{% csrf_token %}
         {{ hop_form.as_p }}
-        <input type="submit" value="Add hop" style="visibility:visible" id="sub_hop" />
+        <input type="submit" class='adder' value="Add hop" style="visibility:visible" id="sub_hop" />
     </form>
     </div>
     <div id='fermentable_box' class='span12 well'>

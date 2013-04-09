@@ -56,7 +56,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = '/static/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -67,6 +67,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    '/home/deployer/static',
 )
 
 # List of finder classes that know how to find static files in
@@ -104,10 +105,10 @@ ROOT_URLCONF = 'BrewMe.urls'
 WSGI_APPLICATION = 'BrewMe.wsgi.application'
 
 TEMPLATE_DIRS = (
-        '/home/wyattpj/dev/BrewMe/Templates',
-        '/home/wyattpj/dev/BrewMe/Templates/User_Auth',
-        '/home/wyattpj/dev/BrewMe/Templates/Home_Screen',
-        '/home/wyattpj/dev/BrewMe/Templates/Recipe',
+        '/home/phillipsra1/dev/BrewMe/Templates',
+        '/home/phillipsra1/dev/BrewMe/Templates/User_Auth',
+        '/home/phillipsra1/dev/BrewMe/Templates/Home_Screen',
+        '/home/phillipsra1/dev/BrewMe/Templates/Recipe',
 )
 
 INSTALLED_APPS = (
@@ -158,7 +159,7 @@ LOGGING = {
 }
 
 # Static bootstrap urls
-BOOTSTRAP_BASE_URL      = 'http://twitter.github.com/bootstrap/assets/'
+BOOTSTRAP_BASE_URL      = 'http://twitter.github.io/bootstrap/assets/'
 BOOTSTRAP_CSS_BASE_URL  = BOOTSTRAP_BASE_URL + 'css/'
 BOOTSTRAP_CSS_URL       = BOOTSTRAP_CSS_BASE_URL + 'bootstrap.css'
 BOOTSTRAP_JS_BASE_URL   = BOOTSTRAP_BASE_URL + 'js/'
