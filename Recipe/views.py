@@ -91,4 +91,27 @@ def get_fermentable(request, ing_id):
                      'description'      : str(ferm.description),}
         return HttpResponse(simplejson.dumps(ferm_dict))
 
+def get_recipe(request, rec_id):
+    if request.method == 'GET':
+        recipe_dict = { 'hop_schedule' : get_hop_schedule(rec_id),}
+        return HttpResponse(simplejson.dumps(recipe_dict))
+    
 
+def get_hop_schedule(rec_id):
+    # We need a hop schedule for a given recipe
+    # This gets all of the hops and information for a given recipe id
+    # and returns a dictionary of lists with all of the information
+    # needed to reconstruct the hop schedule
+    hop_sched = HopSchedule.objects.filter(recipe_id = rec_id)
+    hop_sched_list = []
+
+    for entry in hop_sched:
+        hop = Hop.objects.get(pk = entry.hop_id)
+        hop_dict = { 'name'         : hop.name,
+                     'alpha_acid'   : hop.alpha_acid,
+                     'time'         : entry.time,
+                     'amount'       : entry.time,
+                     'use'          : entry.use}
+        hop_sched_list.append(hop_dict)
+
+    return hop_sched_list

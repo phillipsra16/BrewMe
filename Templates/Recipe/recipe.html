@@ -55,6 +55,11 @@ $(document).ready(function() {
                 $('#current_template').html(data);
                 $('#current_template').css("visibility", "visible");
                 $('#sub_' + ingre_type).css("visibility", "visible");
+                $('#alpha_acid').text(function() {
+                    $.alert(function() {
+                        $(data).find('alpha_acid').text();
+                    });
+                });
             },
         });
     });
@@ -106,7 +111,7 @@ $(document).ajaxSend(function(event, xhr, settings) {
     <div id='hop_box' class='span12 well'>
     <form action="/recipe/hop/add" method="post" id='hop_row'>{% csrf_token %}
         {{ hop_form.as_p }}
-        <input type="submit" value="Add hop" style="visibility:visible" id="sub_hop" />
+        <input type="submit" value="Add hop" style="visibility:hidden" id="sub_hop" />
     </form>
     </div>
     <div id='fermentable_box' class='span12 well'>
@@ -126,4 +131,5 @@ $(document).ajaxSend(function(event, xhr, settings) {
 		{{ misc_form.as_p }}
     </form>
     </div>
+</div>
 {% endblock %} 
