@@ -105,10 +105,10 @@ ROOT_URLCONF = 'BrewMe.urls'
 WSGI_APPLICATION = 'BrewMe.wsgi.application'
 
 TEMPLATE_DIRS = (
-        '/home/phillipsra1/dev/BrewMe/Templates',
-        '/home/phillipsra1/dev/BrewMe/Templates/User_Auth',
-        '/home/phillipsra1/dev/BrewMe/Templates/Home_Screen',
-        '/home/phillipsra1/dev/BrewMe/Templates/Recipe',
+        '/home/wyattpj/dev/BrewMe/Templates',
+        '/home/wyattpj/dev/BrewMe/Templates/User_Auth',
+        '/home/wyattpj/dev/BrewMe/Templates/Home_Screen',
+        '/home/wyattpj/dev/BrewMe/Templates/Recipe',
 )
 
 INSTALLED_APPS = (
