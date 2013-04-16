@@ -7,6 +7,7 @@ from django.template import RequestContext
 from Recipe.forms import *
 from Recipe.models import *
 from django.utils import simplejson
+import json
 
 @login_required
 @never_cache
@@ -93,7 +94,9 @@ def get_fermentable(request, ing_id):
 
 def get_recipe(request, rec_id):
     if request.method == 'GET':
-        recipe_dict = { 'hop_schedule' : get_hop_schedule(rec_id),}
+        recipe_dict = { 'hop_schedule'  : get_hop_schedule(rec_id),
+                        'grain_bill'    : get_grain_bill(rec_id),
+                        'yeast'         : get_yeast_for_recipe(rec_id)}
         return HttpResponse(simplejson.dumps(recipe_dict))
     
 
@@ -106,12 +109,36 @@ def get_hop_schedule(rec_id):
     hop_sched_list = []
 
     for entry in hop_sched:
-        hop = Hop.objects.get(pk = entry.hop_id)
+        hop = Hop.objects.get(name = entry.hop_id)
         hop_dict = { 'name'         : hop.name,
-                     'alpha_acid'   : hop.alpha_acid,
+                     'alpha_acid'   : str(hop.alpha_acid),
                      'time'         : entry.time,
-                     'amount'       : entry.time,
+                     'amount'       : str(entry.amount),
                      'use'          : entry.use}
         hop_sched_list.append(hop_dict)
-
     return hop_sched_list
+
+def get_grain_bill(rec_id):
+    # This will return a list of all of the grains that are being used
+    # for a particular recipe
+    grain_bill = GrainBill.objects.filter(recipe_id = rec_id)
+    grain_list = []
+
+    for entry in grain_bill:
+        grain = Fermentable.objects.get(name = entry.fermentable_id)
+        grain_dict = { 'name'       : grain.name,
+                       'color'      : grain.color,
+                       'ppg'        : str(grain.potential_extract),
+                       'amount'     : str(entry.amount),
+                       'use'        : entry.use}
+        grain_list.append(grain_dict)
+    return grain_list
+
+def get_yeast_for_recipe(rec_id):
+    # This gets the yeast associated with a particular recipe.
+    yeast = Yeast.objects.get(pk = Recipe.objects.get(pk = rec_id).yeast_id)
+    yeast_dict = { 'name'           : yeast.name,
+                   'description'    : yeast.description,
+                   'flocculation'   : yeast.flocculation,
+                   'attenuation'    : yeast.attenuation}
+    return yeast_dict

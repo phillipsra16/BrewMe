@@ -10,6 +10,6 @@ urlpatterns = patterns('Recipe.views',
         'get_fermentable'),
     url(r'^yeast/(?P<ing_id>\d+)/$',
         'get_yeast'),
-    #url(r'^view_recipe/(?<rec_id>\d+/$',
-    #    'get_recipe'),
+    url(r'^view_recipe/(?P<rec_id>\d+)/$',
+        'get_recipe'),
 )
