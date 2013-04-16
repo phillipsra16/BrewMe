@@ -74,7 +74,7 @@ $(document).ready(function() {
         var type = $(data).parent().attr('id'); //String to get the List in 'recipe' that we want
         var ingredient = {};
         _.each($(data).parent().children(), function (data) {
-            if (data.label == null or data.value == null) {
+            if ($(data).label == null or $(data).value == null) {
                 $.alert("Please fill out all the data");
                 return;
             }
