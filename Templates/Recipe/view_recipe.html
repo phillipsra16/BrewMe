@@ -1,21 +1,94 @@
 {% extends "base.html" %}
 {% load bootstrap_toolkit %}
 {% block extra_head %}
+<style>
+    li {
+        list-style-type: none;
+    }
+</style>
 
 {% endblock %}
 {% block content %}
-    <div id='wrapper_div' class='span12'>
-        <div id='hop_container' class='span12 well'>
+    <!-- This section is just to show that the json with the recipe information
+         is in a variable called 'recipe_dict' and that it is available to us' -->
+    {% autoescape off %}
+        <p>{{ recipe_dict }}</p>
+    {% endautoescape %}
 
+    <div id='hop_container' class='span12 well'>
+        <h2>Hop Schedule</h2>
+        <div id='hop_header'>
+            <div class='span3'>
+                <strong>Name</strong>
+            </div>
+            <div class='span2'>
+                <strong>Time</strong>
+            </div>
+            <div class='span2'>
+                <strong>Alpha Acid</strong>
+            </div>
+            <div class='span2'>
+                <strong>Amount (oz)</strong>
+            </div>
+            <div class='span2'>
+                <strong>Use</strong>
+            </div>
         </div>
-        <div id='fermentable_container' class='span12 well'>
+        <div id='hop_entry'>
+            <div id='hop_name' class='span3'></div>
+            <div id='hop_time' class='span2'></div>
+            <div id='hop_alpha' class='span2'></div>
+            <div id='hop_amount' class='span2'></div>
+            <div id='hop_use' class='span2'></div>
+        </div>
+    </div>
+    <div id='fermentable_container' class='span12 well'>
+        <h2>Grain Bill</h2>
+        <div id='grain_header'>
+            <div id='grain_name' class='span3'>
+                <strong>Name</strong>
+            </div>
+            <div id='grain_color' class='span2'>
+                <strong>Color</strong>
+            </div>
+            <div id='grain_ppg' class='span3'>
+                <strong>Potential Extract (ppg)</strong>
+            </div>
+            <div id='grain_amount' class='span2'>
+                <strong>Amount (lb)</strong>
+            </div>
+            <div id='grain_use' class='span1'>
+                <strong>Use</strong>
+            </div>
+        </div>
+        <div id='grain_entry'>
+            <div id='grain_name' class='span3'></div>
+            <div id='grain_color' class='span2'></div>
+            <div id='grain_ppg' class='span3'></div>
+            <div id='grain_amount' class='span2'></div>
+            <div id='grain_use' class='span1'></div>
+        </div>
+    </div>
+    <div id='yeast_container' class='span12 well'>
+        <h2>Yeast</h2>
+        <div id='yeast_header'>
+            <div class='span3'>
+                <strong>Name</strong>
+            </div>
+            <div class='span2'>
+                <strong>Flocculation</strong>
+            </div>
+            <div class='span2'>
+                <strong>Attenuation</strong>
+            </div>
+        </div>
+        <div id='yeast_entry'>
+            <div id='yeast_name' class='span3'></div>
+            <div id='flocculation' class='span2'></div>
+            <div id='attenuation' class='span2'></div>
+        </div>
+    </div>
+    <div id='misc_container' class='span12 well'>
 
-        </div>
-        <div id='yeast_container' class='span12 well'>
-
-        </div>
-        <div id='misc_container' class='span12 well'>
-
-        </div>
     </div>
 {% endblock %}

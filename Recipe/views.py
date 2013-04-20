@@ -97,7 +97,10 @@ def get_recipe(request, rec_id):
         recipe_dict = { 'hop_schedule'  : get_hop_schedule(rec_id),
                         'grain_bill'    : get_grain_bill(rec_id),
                         'yeast'         : get_yeast_for_recipe(rec_id)}
-        return HttpResponse(simplejson.dumps(recipe_dict))
+#        return HttpResponse(simplejson.dumps(recipe_dict))
+    return render_to_response('view_recipe.html', {
+        'recipe_dict' : simplejson.dumps(recipe_dict),
+        }, context_instance=RequestContext(request))
     
 
 def get_hop_schedule(rec_id):
