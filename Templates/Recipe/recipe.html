@@ -29,24 +29,33 @@
 <script>
 function id_from_name(object_name) {
     switch(object_name) {
-        case 'hop_row':
+        case 'hop_box':
             return 'hop';
-        case 'fermentable_row':
+        case 'fermentable_box':
             return 'fermentable';
-        case 'yeast_row':
+        case 'yeast_box':
             return 'yeast';
         default:
-            console.log(selector_name);
+            console.log(object_name);
             return 'nothing found';
     }
 }
 $(document).ready(function() {
+    recipe = {
+        hop : [], //List of Dictionaries of hop ingredients
+        yeast : [], //List of Dictionaries of yeast ingredients
+        fermentable : [] //List of Dictionaries of fermentable ingredients
+    };
     //Method to get ingredient info via AJAX
-    $('.selector').change(function () {
+    $('.selector').change(function (selector) {
         // We are forming our get request name and id here
         //TODO: Clean this up!
-        var ingre_type = id_from_name($(this).parent().attr('id'));
-        var ingre_id = $(this).children(':selected').val();
+        var ingredient = selector.target;
+        //This will return the ingredient from the ingredient_box html element
+        //I have to go this far up the chain in order to decouple the submit button from the form
+        //it is associated with. Otherwise the Django interperter will try to redirect on submit.
+        var ingre_type = id_from_name($(ingredient).parent().parent().parent().attr('id'));
+        var ingre_id = $(ingredient).children(':selected').val();
         url_base = 'http://66.169.77.204:8000/recipe/';
         $.ajax({
             type:'GET',
@@ -64,23 +73,29 @@ $(document).ready(function() {
             },
         });
     });
-    $('.adder').submit(function (data) {
+    $('input[type=submit]').click(function (data) {
         //Dictionary containing all recipe information
-        recipe = {
-            hop : [], //List of Dictionaries of hop ingredients
-            yeast : [], //List of Dictionaries of yeast ingredients
-            fermentable : [] //List of Dictionaries of fermentable ingredients
-        };
-        var type = $(data).parent().attr('id'); //String to get the List in 'recipe' that we want
+        target = data.target;
+        var type = id_from_name($(target).parent().attr('id'));
         var ingredient = {};
-        _.each($(data).parent().children(), function (data) {
-            if ($(data).label == null or $(data).value == null) {
-                $.alert("Please fill out all the data");
+        _.each($(target).parent().children('form').children('p').children('input'), function (data) {
+            if ($(data).val() == null) {
+                console.log("Please fill in all of the data" + $(data).val());
                 return;
             }
-            ingredient.append(data.label, data.value);
+            var label = $(data).attr('name');
+            console.log(label + " " + $(data).val())
+            ingredient[label] = $(data).val();
+            //$(ingredient).extend({label : $(data).val()});
         });
-        recipe.type.append(ingredient);
+        var val = $(target).parent().children('form').children('p').children('select').children(':selected').html();
+        if (val == null) {
+            $.alert("1Please fill in all of the data");
+            return;
+        }
+        ingredient.name = val;
+        recipe[type].push(ingredient);
+        console.log(recipe);
     });
 });
 
@@ -128,10 +143,10 @@ $(document).ajaxSend(function(event, xhr, settings) {
 {{ state }}
 <div id='template' style="visibility:hidden; float:right;"></div>
     <div id='hop_box' class='span12 well'>
-    <form action="/recipe/hop/add"  id='hop_row'>{% csrf_token %}
+    <form id='hop_row'>{% csrf_token %}
         {{ hop_form.as_p }}
-        <input type="submit" value="Add hop" style="visibility:hidden" id="sub_hop" />
     </form>
+    <input type="submit" value="Add hop" style="visibility:hidden" id="sub_hop" />
     </div>
     <div id='fermentable_box' class='span12 well'>
 	<form id='fermentable_row'>{% csrf_token %}
