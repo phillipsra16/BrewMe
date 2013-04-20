@@ -94,9 +94,11 @@ def get_fermentable(request, ing_id):
 
 def get_recipe(request, rec_id):
     if request.method == 'GET':
-        recipe_dict = { 'hop_schedule'  : get_hop_schedule(rec_id),
+        recipe_dict = { 'recipe_name'   : str(Recipe.objects.get(pk = rec_id)),
+                        'hop_schedule'  : get_hop_schedule(rec_id),
                         'grain_bill'    : get_grain_bill(rec_id),
-                        'yeast'         : get_yeast_for_recipe(rec_id)}
+                        'yeast'         : get_yeast_for_recipe(rec_id),
+                        'misc'          : get_misc_for_recipe(rec_id)}
 #        return HttpResponse(simplejson.dumps(recipe_dict))
     return render_to_response('view_recipe.html', {
         'recipe_dict' : simplejson.dumps(recipe_dict),
@@ -136,6 +138,18 @@ def get_grain_bill(rec_id):
                        'use'        : entry.use}
         grain_list.append(grain_dict)
     return grain_list
+
+def get_misc_for_recipe(rec_id):
+    misc_stuff = MiscBill.objects.filter(recipe_id = rec_id)
+    misc_list = []
+
+    for entry in misc_stuff:
+        misc = Misc.objects.get(name = entry.misc_id)
+        misc_dict = {   'name'      : misc.name,
+                        'descr'     : misc.description}
+        misc_list.append(misc_dict)
+
+    return misc_list
 
 def get_yeast_for_recipe(rec_id):
     # This gets the yeast associated with a particular recipe.

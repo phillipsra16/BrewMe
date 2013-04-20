@@ -56,7 +56,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = '/static/'
+STATIC_ROOT = '/home/phillipsra1/dev/BrewMe/static/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -68,6 +68,7 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     '/home/deployer/static',
+    '/home/phillipsra1/dev/BrewMe/Recipe/static',
 )
 
 # List of finder classes that know how to find static files in

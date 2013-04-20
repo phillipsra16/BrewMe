@@ -6,15 +6,122 @@
         list-style-type: none;
     }
 </style>
+<script>
+    // global for recipe holding
+    var recipe = {{ recipe_dict|safe }}; // safe gets rid of &quot
+    
+    // jQuery.ready 
+    $(function() {
+        $('#recipe_name').text(recipe.recipe_name);
+        display_hop_schedule();
+        display_grain_bill();
+        display_yeast();
+        display_misc();
+    }); // end jQuery.ready
 
+    // fills a hop entry template
+    function fill_hop_template(hop, $template) {
+        $template.find('#hop_name').append(hop.name);
+        $template.find('#hop_time').append(hop.time);
+        $template.find('#hop_alpha').append(hop.alpha_acid);
+        $template.find('#hop_amount').append(hop.amount);
+        $template.find('#hop_use').append(function(hop) {
+            switch(hop.use) {
+                case 1:
+                    return 'First Wort';
+                case 2:
+                    return 'Boil';
+                case 3:
+                    return 'Whirlpool';
+                case 4:
+                    return 'Dry Hop';
+                default:
+                    return 'Boil';
+            }
+        });
+    }
+
+    // loops over all of the hops in a hop schedule and inserts them into the page
+    function display_hop_schedule() {
+        $.get({{ STATIC_URL }} + 'hop_entry.htm', function(template) {
+            $.each(recipe.hop_schedule, function(i, hop) {
+                var $tpl = $('<div />').html(template); // make detached DOM node
+                fill_hop_template(hop, $tpl);
+                $('#hop_container').append($tpl.html());
+            });
+        });
+    }
+
+    // fills a grain entry template
+    function fill_grain_template(grain, $template) {
+        $template.find('#grain_name').append(grain.name);
+        $template.find('#grain_color').append(grain.color);
+        $template.find('#grain_ppg').append(grain.ppg);
+        $template.find('#grain_amount').append(grain.amount);
+        $template.find('#grain_use').append(function(grain) {
+            switch(grain.use) {
+                case 1:
+                    return 'Mash';
+                case 2:
+                    return 'Boil';
+                case 3:
+                    return 'Post-Boil';
+                case 4:
+                    return 'Primary';
+                case 5:
+                    return 'Secondary';
+                default:
+                    return 'Boil';
+            }
+        });
+    }
+
+    // loops over all of the hops in a hop schedule and inserts them into the page
+    function display_grain_bill() {
+        $.get({{ STATIC_URL }} + 'grain_entry.htm', function(template) {
+            $.each(recipe.grain_bill, function(i, grain) {
+                var $tpl = $('<div />').html(template); // make detached DOM node
+                fill_grain_template(grain, $tpl);
+                $('#fermentable_container').append($tpl.html());
+            });
+        });
+    }
+
+    // fills a yeast_entry template
+    function fill_yeast_template(yeast, $template) {
+        $template.find('#yeast_name').append(yeast.name);
+        $template.find('#flocculation').append(yeast.flocculation);
+        $template.find('#attenuation').append(yeast.attenuation);
+    }
+
+    // loops over all of the hops in a hop schedule and inserts them into the page
+    function display_yeast() {
+        $.get({{ STATIC_URL }} + 'yeast_entry.htm', function(template) {
+            var $tpl = $('<div />').html(template); // make detached DOM node
+            fill_yeast_template(recipe.yeast, $tpl);
+            $('#yeast_container').append($tpl.html());
+        });
+    }
+
+    function fill_misc_template(misc, $template) {
+        $template.find('#misc_name').append(misc.name);
+        $template.find('#misc_desc').append(misc.description);
+    }
+
+    function display_misc() {
+        $.get({{ STATIC_URL }} + 'misc_entry.htm', function(template) {
+            var $tpl = $('<div />').html(template); // make detached DOM node
+            fill_yeast_template(recipe.misc, $tpl);
+            $('#misc_container').append($tpl.html());
+        });
+    }
+
+</script>
 {% endblock %}
 {% block content %}
-    <!-- This section is just to show that the json with the recipe information
-         is in a variable called 'recipe_dict' and that it is available to us' -->
-    {% autoescape off %}
-        <p>{{ recipe_dict }}</p>
-    {% endautoescape %}
-
+    <div id='recipe_header' class='span12'>
+        <h1 id='recipe_name'></h1>
+    </div>
     <div id='hop_container' class='span12 well'>
         <h2>Hop Schedule</h2>
         <div id='hop_header'>
@@ -22,10 +129,10 @@
                 <strong>Name</strong>
             </div>
             <div class='span2'>
-                <strong>Time</strong>
+                <strong>Time (min)</strong>
             </div>
             <div class='span2'>
-                <strong>Alpha Acid</strong>
+                <strong>Alpha Acid (%)</strong>
             </div>
             <div class='span2'>
                 <strong>Amount (oz)</strong>
@@ -43,7 +150,7 @@
                 <strong>Name</strong>
             </div>
             <div id='grain_color' class='span2'>
-                <strong>Color</strong>
+                <strong>Color (SRM)</strong>
             </div>
             <div id='grain_ppg' class='span3'>
                 <strong>Potential Extract (ppg)</strong>
@@ -69,10 +176,18 @@
             <div class='span2'>
                 <strong>Attenuation</strong>
             </div>
+            <br>
         </div>
         <!-- yeast_entry.htm can be appended here -->    
     </div>
     <div id='misc_container' class='span12 well'>
-
+        <h2>Miscellaneous</h2>
+        <div class='span3'>
+            <strong>Name</strong>
+        </div>
+        <div class='span5'>
+            <strong>Description</strong>
+        </div>
+        <!-- misc_entry.htm can be appended here -->
     </div>
 {% endblock %}
