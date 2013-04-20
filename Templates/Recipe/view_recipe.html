@@ -17,6 +17,7 @@
         display_grain_bill();
         display_yeast();
         display_misc();
+        display_stats();
     }); // end jQuery.ready
 
     // fills a hop entry template
@@ -116,11 +117,83 @@
         });
     }
 
+    // TODO this function
+    function display_stats() {
+        var og = calc_og();
+        var ibu = calc_ibu();
+        var color = calc_color();
+
+        $('#og span').append(og);
+        $('#ibu span').append(ibu);
+        $('#color span').append(color);
+    }
+
+    // Malt SG = (Malt weight) x (Malt ppg) x (Brewhouse efficiency) / (Solution Volume)
+    function calc_og() {
+        var og = 0.0;
+        var SG = 0;
+        recipe.grain_bill.forEach(function(grain) {
+            var pts = grain.ppg.slice(-2);
+            var tmp = parseFloat(grain.amount) * parseInt(pts) * 0.75 / 5.5;
+            SG += tmp;
+        });
+        if (og < 100) {
+            og = "1.0" + Math.round(SG);
+        } else {
+            og = "1." + Math.round(SG);
+        }      
+        return og;
+    }
+
+    function hop_util(time) {
+        switch(time) {
+            case 90: return 0.226;
+            case 80: return 0.222;
+            case 70: return 0.218;
+            case 60: return 0.211;
+            case 55: return 0.206;
+            case 50: return 0.200;
+            case 45: return 0.194;
+            case 40: return 0.185;
+            case 35: return 0.175;
+            case 30: return 0.162;
+            case 25: return 0.147;
+            case 20: return 0.128;
+            case 15: return 0.105;
+            case 10: return 0.076;
+            case 5:  return 0.042;
+            case 0:  return 0.000;
+        }
+    }
+
+    function calc_ibu() {
+        var ibu = 0;
+        recipe.hop_schedule.forEach(function(hop) {
+            var tmp = hop.amount * hop.alpha_acid * hop_util(hop.time) * 75 / 5.5;
+            ibu += tmp;
+        });
+        return Math.round(ibu);
+    }
+
+    function calc_color() {
+        var color = 0;
+        recipe.grain_bill.forEach(function(grain) {
+            var tmp = grain.amount * grain.color / 5.5;
+            color = 1.4922 * Math.pow(tmp, 0.6859);
+        });
+        return Math.round(color);
+    }
+
 </script>
 {% endblock %}
 {% block content %}
     <div id='recipe_header' class='span12'>
         <h1 id='recipe_name'></h1>
+        <div id='recipe_stats'>
+            <div id='og' class='span3'><span>OG (estimated): </span></div>
+            <div id='ibu' class='span2'><span>IBU (estimated): </span></div>
+            <div id='color' class='span2'><span>Color (estimated): </span></div>
+        </div>
     </div>
     <div id='hop_container' class='span12 well'>
         <h2>Hop Schedule</h2>
@@ -150,7 +223,7 @@
                 <strong>Name</strong>
             </div>
             <div id='grain_color' class='span2'>
-                <strong>Color (SRM)</strong>
+                <strong>Color (Lovibond)</strong>
             </div>
             <div id='grain_ppg' class='span3'>
                 <strong>Potential Extract (ppg)</strong>
