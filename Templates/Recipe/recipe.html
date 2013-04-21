@@ -6,7 +6,7 @@
         width: 100%;
     }
     label{
-        display: block;
+        display: inline-block;
         float: left;
     }
     input{
@@ -18,12 +18,6 @@
         max-width: 15%;
         display: block;
         float:left;
-    }
-    #fermentable_row {
-    }
-    #yeast_row {
-    }
-    #misc_row {
     }
 </style>
 <script>
@@ -41,6 +35,15 @@ function id_from_name(object_name) {
     }
 }
 $(document).ready(function() {
+    // make the time select field from being too large
+    $('#id_time').css('width','55px');
+    $('#id_amount').css('width','45px');
+    $('#id_use').css('width','100px');
+    $('#id_alpha_acid').css('width','55px');
+    $('#id_hop_name,#id_time,#id_use,#id_alpha_acid,#id_amount').
+            css('margin-right','5px');
+
+
     recipe = {
         hop : [], //List of Dictionaries of hop ingredients
         yeast : [], //List of Dictionaries of yeast ingredients
@@ -65,11 +68,8 @@ $(document).ready(function() {
                 $('#current_template').html(data);
                 $('#current_template').css("visibility", "visible");
                 $('#sub_' + ingre_type).css("visibility", "visible");
-                $('#alpha_acid').text(function() {
-                    $.alert(function() {
-                        $(data).find('alpha_acid').text();
-                    });
-                });
+                var ret_json = JSON.parse(data);
+                $('#id_alpha_acid').val(ret_json.alpha_acid + "");
             },
         });
     });
@@ -89,8 +89,16 @@ $(document).ready(function() {
             //$(ingredient).extend({label : $(data).val()});
         });
         var val = $(target).parent().children('form').children('p').children('select').children(':selected').html();
+
+        // ******************************************************************
+        // make sure hop time is recorded
+        ingredient.time = $('#id_time').val();
+        // record hop usage
+        ingredient.use = $('#id_use').val();
+        // ******************************************************************
+        
         if (val == null) {
-            $.alert("1Please fill in all of the data");
+            $.alert("Please fill in all of the data");
             return;
         }
         ingredient.name = val;
@@ -143,10 +151,10 @@ $(document).ajaxSend(function(event, xhr, settings) {
 {{ state }}
 <div id='template' style="visibility:hidden; float:right;"></div>
     <div id='hop_box' class='span12 well'>
-    <form id='hop_row'>{% csrf_token %}
-        {{ hop_form.as_p }}
-    </form>
-    <input type="submit" value="Add hop" style="visibility:hidden" id="sub_hop" />
+        <form id='hop_row'>{% csrf_token %}
+            {{ hop_form.as_p }}
+        </form>
+        <input type="submit" value="Add hop" style="visibility:hidden" id="sub_hop" />
     </div>
     <div id='fermentable_box' class='span12 well'>
 	<form id='fermentable_row'>{% csrf_token %}
