@@ -90,15 +90,16 @@ function update_recipe(data) {
     var ingredient = {};
     //For each box in the ingredient div..
     //I.E. for each attribute describing this ingredient, fill out the ingredient dict with the value
+    add_ingredient = true;
     _.each($(target).parent().children('form').children('p').children('input'), function (data) {
-        if ($(data).val() == null) {
-            console.log("Please fill in all of the data" + $(data).val());
+        if ($(data).val() == '' && add_ingredient) {
+            feedback('error', $(target).parent(), 'Please fill out all of the data');
+            add_ingredient = false;
             return;
         }
         var label = $(data).attr('name');
-        console.log(label + " " + $(data).val())
+        console.log(label + ", " + $(data).val())
         ingredient[label] = $(data).val();
-        //$(ingredient).extend({label : $(data).val()});
     });
     ingredient.id = current[type]; 
     var val = $(target).parent().children('form').children('p').children('select').children(':selected').html();
@@ -114,11 +115,53 @@ function update_recipe(data) {
         return;
     }
     ingredient.name = val;
-    if (type == 'yeast')
-        recipe['yeast'] = ingredient;
-    else
-        recipe[type].push(ingredient);
+    if (add_ingredient) {
+        if (type == 'yeast')
+            recipe['yeast'] = ingredient;
+        else
+            recipe[type].push(ingredient);
+        feedback('added', $(target).parent(), 'Ingredient was added');
+    }
     console.log(recipe);
+}
+
+
+//Creates a message and binds a focus event to remove the message
+function feedback_message_factory(object, message) {
+    var element = $('<label>')
+        .attr('id', 'id_message')
+        .html(message);
+    $(object).prepend(element);
+    $(object).on('focus', 'input, select', function () {
+        console.log('remove');
+        $('#id_message').remove();
+    });
+}
+
+
+//Provides user feedback
+function feedback(type, object, message) {
+    focus_time = 2500;
+    var initial_color = $(object).css('background-color');
+    switch (type) {
+        case 'added':
+            $(object).css('background-color', 'green');
+            feedback_message_factory(object, message);
+            $(object).animate({
+                'background-color' : initial_color
+            }, focus_time);
+            break;
+        case 'error':
+            $(object).css('background-color', 'red');
+            feedback_message_factory(object, message);
+            $(object).animate({
+                'background-color' : initial_color
+            }, focus_time);
+            break;
+        default:
+            console.log(type + " " + object + " " + message);
+    }
+
 }
 
 
