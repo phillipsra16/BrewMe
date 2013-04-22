@@ -58,7 +58,8 @@ class MiscForm(forms.Form):
 class CommentForm(forms.Form):
     text = forms.CharField(
             label="Comment",
-            max_length=1024)
+            max_length=1024,
+            widget=forms.Textarea())
 
 
 class HopForm(forms.Form):

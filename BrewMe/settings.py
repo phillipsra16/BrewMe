@@ -56,7 +56,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = '/home/wyattpj/dev/BrewMe/static/'
+STATIC_ROOT = '/home/phillipsra1/dev/BrewMe/static/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -68,7 +68,7 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     '/home/deployer/static',
-    '/home/wyattpj/dev/BrewMe/Recipe/static',
+    '/home/phillipsra1/dev/BrewMe/Recipe/static',
 )
 
 # List of finder classes that know how to find static files in
@@ -106,10 +106,10 @@ ROOT_URLCONF = 'BrewMe.urls'
 WSGI_APPLICATION = 'BrewMe.wsgi.application'
 
 TEMPLATE_DIRS = (
-        '/home/wyattpj/dev/BrewMe/Templates',
-        '/home/wyattpj/dev/BrewMe/Templates/User_Auth',
-        '/home/wyattpj/dev/BrewMe/Templates/Home_Screen',
-        '/home/wyattpj/dev/BrewMe/Templates/Recipe',
+        '/home/phillipsra1/dev/BrewMe/Templates',
+        '/home/phillipsra1/dev/BrewMe/Templates/User_Auth',
+        '/home/phillipsra1/dev/BrewMe/Templates/Home_Screen',
+        '/home/phillipsra1/dev/BrewMe/Templates/Recipe',
 )
 
 INSTALLED_APPS = (
