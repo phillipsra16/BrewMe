@@ -2,20 +2,24 @@
 
 //Recipe that builds up as the user adds ingredients
 recipe = {
-    hop : [], //List of Dictionaries of hop ingredients
-    yeast : {}, //Dictionary of yeast ingredients
-    fermentable : [] //List of Dictionaries of fermentable ingredients
+    hop         : [], //List of Dictionaries of hop ingredients
+    yeast       : {}, //Dictionary of yeast ingredients
+    fermentable : [], //List of Dictionaries of fermentable ingredients
+    meta        : {}, //Recipe metadata
 };
 
 
-//Dictionaries that store the currently worked on ingredients
-current_yeast = {};
-current_hop = {};
-current_fermentable = {};
+//Dictionaries that store the id of the currently worked on ingredients
+current = {
+    yeast : '',
+    hop : '',
+    fermentable : ''
+};
 
 
 //Sends a post request to recipe/design view and redirects to view recipe page
 function post_recipe() {
+    recipe.meta['recipe_name'] = $('#recipe_name').val();
     $.post(
         "/recipe/design/",
         {msg: JSON.stringify(recipe)},
@@ -67,7 +71,9 @@ function update_ingredient(selector) {
             $('#current_template').css("visibility", "visible");
             $('#sub_' + ingre_type).css("visibility", "visible");
             var ret_json = JSON.parse(data);
+            //TODO: Make this more agnostic of the type
             $('#id_alpha_acid').val(ret_json.alpha_acid + "");
+            current[ingre_type] = ret_json.id;
         },
     });
 }
@@ -94,6 +100,7 @@ function update_recipe(data) {
         ingredient[label] = $(data).val();
         //$(ingredient).extend({label : $(data).val()});
     });
+    ingredient.id = current[type]; 
     var val = $(target).parent().children('form').children('p').children('select').children(':selected').html();
 
     // ******************************************************************

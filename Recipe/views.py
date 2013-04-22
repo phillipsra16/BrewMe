@@ -36,7 +36,7 @@ def recipe_design(request):
         # Recipe creation
         my_recipe = Recipe()
         my_recipe.user_id      = User.objects.get(id = user_id)
-        my_recipe.name         = user_id
+        my_recipe.name         = recipe_dict['meta']['recipe_name']
         my_recipe.yeast_id     = Yeast.objects.get(name =
                                         recipe_dict['yeast']['name'])
         my_recipe.style_id     = Style.objects.get(name = 'test')
@@ -47,9 +47,7 @@ def recipe_design(request):
             my_grain                = GrainBill()
             my_grain.recipe_id      = my_recipe
             # workaround for no first() in django queryset api
-            ferm_set = Fermentable.objects.filter(name = ferm['name'])
-            ferm_list = list(ferm_set[:1])
-            my_grain.fermentable_id = ferm_list[0]
+            my_grain.fermentable_id = Fermentable.objects.get(pk = ferm['id'])
             my_grain.amount         = ferm['amount']
             my_grain.use            = ferm['use']
             my_grain.save()
@@ -57,8 +55,7 @@ def recipe_design(request):
         for hop in recipe_dict['hop']:
             my_hop              = HopSchedule()
             my_hop.recipe_id    = my_recipe
-            my_hop.hop_id       = Hop.objects.get(name =
-                                    hop['name'])
+            my_hop.hop_id       = Hop.objects.get(pk = hop['id'])
             my_hop.time         = hop['time']
             my_hop.amount       = hop['amount']
             my_hop.use          = hop['use']
