@@ -38,7 +38,7 @@ def recipe_design(request):
         my_recipe.user_id      = User.objects.get(id = user_id)
         my_recipe.name         = user_id
         my_recipe.yeast_id     = Yeast.objects.get(name =
-                                        recipe_dict['yeast'][0]['name'])
+                                        recipe_dict['yeast']['name'])
         my_recipe.style_id     = Style.objects.get(name = 'test')
         my_recipe.save()
 
