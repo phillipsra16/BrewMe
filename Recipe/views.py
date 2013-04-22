@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.http import HttpResponseRedirect, HttpResponse
@@ -21,13 +21,59 @@ def recipe_design(request):
     # If everything passes, submit Recipe object and redirect to display
     # Else reload with forms pre-filled in, highlight missing data
 
+    if request.method == 'POST':
+        # incoming data is not sanitized,
+        # TODO: write sanitizer, put in Recipe/models.py:Recipe.__init__
+
+        # Gather the info we need for recipe creation
+        user_id = request.session['user_id']
+        recipe_dict = simplejson.loads( request.POST.get('msg', ''))
+        print(recipe_dict)
+
+        # TODO: encapsulate these into individual methods
+        # TODO: DEPENDENT ON TODO IN recipe.html, parse ingredients by names 
+        #       instead of ids
+        # Recipe creation
+        my_recipe = Recipe()
+        my_recipe.user_id      = User.objects.get(id = user_id)
+        my_recipe.name         = user_id
+        my_recipe.yeast_id     = Yeast.objects.get(name =
+                                        recipe_dict['yeast'][0]['name'])
+        my_recipe.style_id     = Style.objects.get(name = 'test')
+        my_recipe.save()
+
+        # Grain Bill creation
+        for ferm in recipe_dict['fermentable']:
+            my_grain                = GrainBill()
+            my_grain.recipe_id      = my_recipe
+            # workaround for no first() in django queryset api
+            ferm_set = Fermentable.objects.filter(name = ferm['name'])
+            ferm_list = list(ferm_set[:1])
+            my_grain.fermentable_id = ferm_list[0]
+            my_grain.amount         = ferm['amount']
+            my_grain.use            = ferm['use']
+            my_grain.save()
+
+        for hop in recipe_dict['hop']:
+            my_hop              = HopSchedule()
+            my_hop.recipe_id    = my_recipe
+            my_hop.hop_id       = Hop.objects.get(name =
+                                    hop['name'])
+            my_hop.time         = hop['time']
+            my_hop.amount       = hop['amount']
+            my_hop.use          = hop['use']
+            my_hop.save()
+
+        return HttpResponse(simplejson.dumps({'url' : '/recipe/view_recipe/%s/'
+                % my_recipe.id}))
+
     # Data being requested
     # This will be when the user enters this view via recipe create or edit
     # or when the user fails to input all fields before a post
     # if request.method == 'GET':
-    state = 'get'
     # Check if we need to prefill forms
     method = request.GET.get('method', '')
+
     # Pre fill forms
     if method == 'edit':
         fermentable_form = request.GET#.get('fermentables','')
@@ -47,7 +93,6 @@ def recipe_design(request):
         'fermentable_form' : fermentable_form,
         'yeast_form' : yeast_form,
         'misc_form' : misc_form,
-        'state' : state,
         }, context_instance=RequestContext(request))
 
 
@@ -60,7 +105,8 @@ def get_hop(request, ing_id):
         hop = Hop.objects.get(pk = ing_id)
         hop_dict= { 'use'           : str(hop.use),
                     'hop_name'      : str(hop.name),
-                    'alpha_acid'    : str(hop.alpha_acid),}
+                    'alpha_acid'    : str(hop.alpha_acid),
+                    'id'            : str(hop.id),}
         return HttpResponse(simplejson.dumps(hop_dict))
 
 
@@ -74,7 +120,8 @@ def get_yeast(request, ing_id):
         yeast_dict= { 'yeast_name'      : str(yeast.description),
                       'description'     : str(yeast.name),
                       'flocculation'    : str(yeast.flocculation),
-                      'attenuation'     : str(yeast.attenuation),}
+                      'attenuation'     : str(yeast.attenuation),
+                      'id'              : str(yeast.id),}
         return HttpResponse(simplejson.dumps(yeast_dict))
 
 
@@ -89,21 +136,23 @@ def get_fermentable(request, ing_id):
                      'color'            : str(ferm.color),
                      'potential'        : str(ferm.potential_extract),
                      'use'              : str(ferm.use),
-                     'description'      : str(ferm.description),}
+                     'description'      : str(ferm.description),
+                     'id'               : str(ferm.id),}
         return HttpResponse(simplejson.dumps(ferm_dict))
 
+
+@never_cache
 def get_recipe(request, rec_id):
-    if request.method == 'GET':
-        recipe_dict = { 'recipe_name'   : str(Recipe.objects.get(pk = rec_id)),
-                        'hop_schedule'  : get_hop_schedule(rec_id),
-                        'grain_bill'    : get_grain_bill(rec_id),
-                        'yeast'         : get_yeast_for_recipe(rec_id),
-                        'misc'          : get_misc_for_recipe(rec_id)}
-#        return HttpResponse(simplejson.dumps(recipe_dict))
+    recipe_dict = { 'recipe_name'   : str(Recipe.objects.get(pk = rec_id)),
+                    'hop_schedule'  : get_hop_schedule(rec_id),
+                    'grain_bill'    : get_grain_bill(rec_id),
+                    'yeast'         : get_yeast_for_recipe(rec_id),
+                    'misc'          : get_misc_for_recipe(rec_id)}
+    #return HttpResponse(simplejson.dumps(recipe_dict))
     return render_to_response('view_recipe.html', {
         'recipe_dict' : simplejson.dumps(recipe_dict),
         }, context_instance=RequestContext(request))
-    
+
 
 def get_hop_schedule(rec_id):
     # We need a hop schedule for a given recipe
@@ -123,6 +172,7 @@ def get_hop_schedule(rec_id):
         hop_sched_list.append(hop_dict)
     return hop_sched_list
 
+
 def get_grain_bill(rec_id):
     # This will return a list of all of the grains that are being used
     # for a particular recipe
@@ -130,7 +180,10 @@ def get_grain_bill(rec_id):
     grain_list = []
 
     for entry in grain_bill:
-        grain = Fermentable.objects.get(name = entry.fermentable_id)
+        # Workaround
+        # TODO: FIX THE FUCKIN DATABASE!!!  
+        grain_set = list(Fermentable.objects.filter(name = entry.fermentable_id))
+        grain = grain_set[0]
         grain_dict = { 'name'       : grain.name,
                        'color'      : grain.color,
                        'ppg'        : str(grain.potential_extract),
@@ -138,6 +191,7 @@ def get_grain_bill(rec_id):
                        'use'        : entry.use}
         grain_list.append(grain_dict)
     return grain_list
+
 
 def get_misc_for_recipe(rec_id):
     misc_stuff = MiscBill.objects.filter(recipe_id = rec_id)
@@ -151,9 +205,12 @@ def get_misc_for_recipe(rec_id):
 
     return misc_list
 
+
 def get_yeast_for_recipe(rec_id):
     # This gets the yeast associated with a particular recipe.
-    yeast = Yeast.objects.get(pk = Recipe.objects.get(pk = rec_id).yeast_id)
+    yeast_id = Recipe.objects.get(pk = rec_id).yeast_id
+    print(yeast_id)
+    yeast = Yeast.objects.get(name = yeast_id)
     yeast_dict = { 'name'           : yeast.name,
                    'description'    : yeast.description,
                    'flocculation'   : yeast.flocculation,

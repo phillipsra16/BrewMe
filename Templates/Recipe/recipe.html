@@ -21,6 +21,17 @@
     }
 </style>
 <script>
+function post_recipe() {
+    $.post(
+        "/recipe/design/",
+        {msg: JSON.stringify(recipe)},
+        function (data) {
+            ret_JSON = JSON.parse(data)
+            window.location.href = ret_JSON['url'];    
+        }
+    );
+}
+    
 function id_from_name(object_name) {
     switch(object_name) {
         case 'hop_box':
@@ -29,6 +40,8 @@ function id_from_name(object_name) {
             return 'fermentable';
         case 'yeast_box':
             return 'yeast';
+        case 'recipe_box':
+            return 'recipe';
         default:
             console.log(object_name);
             return 'nothing found';
@@ -65,6 +78,7 @@ $(document).ready(function() {
             url: url_base + ingre_type + '/' + ingre_id + '/',
             success: function(data) {
                 //TODO: Parse data dict and display beautifully. Here would be a good place to re-use some of the code from the project last semester
+                //TODO: save the ingredient in a global var. This will make parsing it and adding to dict much easier
                 $('#current_template').html(data);
                 $('#current_template').css("visibility", "visible");
                 $('#sub_' + ingre_type).css("visibility", "visible");
@@ -73,11 +87,19 @@ $(document).ready(function() {
             },
         });
     });
+
+
     $('input[type=submit]').click(function (data) {
         //Dictionary containing all recipe information
         target = data.target;
         var type = id_from_name($(target).parent().attr('id'));
+        //Call method to actually post recipe if need be
+        if (type == 'recipe')
+            post_recipe();
+        //Create an empty ingredient dict to be filled
         var ingredient = {};
+        //For each box in the ingredient div..
+        //I.E. for each attribute describing this ingredient, fill out the ingredient dict with the value
         _.each($(target).parent().children('form').children('p').children('input'), function (data) {
             if ($(data).val() == null) {
                 console.log("Please fill in all of the data" + $(data).val());
@@ -98,7 +120,6 @@ $(document).ready(function() {
         // ******************************************************************
         
         if (val == null) {
-            $.alert("Please fill in all of the data");
             return;
         }
         ingredient.name = val;
@@ -157,21 +178,24 @@ $(document).ajaxSend(function(event, xhr, settings) {
         <input type="submit" value="Add hop" style="visibility:hidden" id="sub_hop" />
     </div>
     <div id='fermentable_box' class='span12 well'>
-	<form id='fermentable_row'>{% csrf_token %}
-		{{ fermentable_form.as_p }}
+        <form id='fermentable_row'>{% csrf_token %}
+            {{ fermentable_form.as_p }}
+        </form>
         <input type="submit" value="Add Fermentable" style="visibility:hidden" id="sub_fermentable" />
-    </form>
     </div>
     <div id='yeast_box' class='span12 well'>
-	<form id='yeast_row'>{% csrf_token %}
-		{{ yeast_form.as_p }}
+        <form id='yeast_row'>{% csrf_token %}
+		    {{ yeast_form.as_p }}
+        </form>
         <input type="submit" value="Add Yeast" style="visibility:hidden" id="sub_yeast" />
-    </form>
     </div>
     <div id='misc_box' class='span12 well'>
 	<form id='misc_row'>{% csrf_token %}
 		{{ misc_form.as_p }}
     </form>
+    </div>
+    <div id='recipe_box'>
+        <input type="submit" value="Create Recipe!" id="sub_recipe"/>
     </div>
 </div>
 {% endblock %} 
