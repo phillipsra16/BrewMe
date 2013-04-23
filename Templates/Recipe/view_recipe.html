@@ -21,6 +21,7 @@ $(function() {
 }); // end jQuery.ready
 
 // fills a hop entry template
+// TODO: Abstract and make agnostic
 function fill_hop_template(hop, $template) {
     $template.find('#hop_name').append(hop.name);
     $template.find('#hop_time').append(hop.time);
