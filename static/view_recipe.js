@@ -1,15 +1,6 @@
-{% extends "base.html" %}
-{% load bootstrap_toolkit %}
-{% block extra_head %}
-<style>
-    li {
-        list-style-type: none;
-    }
-</style>
-{% load static from staticfiles %}
-<script>
 // global for recipe holding
 var recipe = {{ recipe_dict|safe }}; // safe gets rid of &quot
+
 // jQuery.ready 
 $(function() {
     $('#recipe_name').text(recipe.recipe_name);
@@ -26,7 +17,7 @@ function fill_hop_template(hop, $template) {
     $template.find('#hop_time').append(hop.time);
     $template.find('#hop_alpha').append(hop.alpha_acid);
     $template.find('#hop_amount').append(hop.amount);
-    $template.find('#hop_use').append(function() {
+    $template.find('#hop_use').append(function(hop) {
         switch(hop.use) {
             case 1:
                 return 'First Wort';
@@ -59,7 +50,7 @@ function fill_grain_template(grain, $template) {
     $template.find('#grain_color').append(grain.color);
     $template.find('#grain_ppg').append(grain.ppg);
     $template.find('#grain_amount').append(grain.amount);
-    $template.find('#grain_use').append(function() {
+    $template.find('#grain_use').append(function(grain) {
         switch(grain.use) {
             case 1:
                 return 'Mash';
@@ -183,84 +174,3 @@ function calc_color() {
     return Math.round(color);
 }
 
-</script>
-{% endblock %}
-{% block content %}
-    <div id='recipe_header' class='span12'>
-        <h1 id='recipe_name'></h1>
-        <div id='recipe_stats'>
-            <div id='og' class='span2'><span><strong>*OG: </strong></span></div>
-            <div id='ibu' class='span2'><span><strong>*IBU: </strong></span></div>
-            <div id='color' class='span2'><span><strong>*Color: </strong></span></div>
-            <div class='span2' style='float:right'>(* Estimated values)</div>
-        </div>
-    </div>
-    <div id='hop_container' class='span12 well'>
-        <h2>Hop Schedule</h2>
-        <div id='hop_header'>
-            <div class='span3'>
-                <strong>Name</strong>
-            </div>
-            <div class='span2'>
-                <strong>Time (min)</strong>
-            </div>
-            <div class='span2'>
-                <strong>Alpha Acid (%)</strong>
-            </div>
-            <div class='span2'>
-                <strong>Amount (oz)</strong>
-            </div>
-            <div class='span2'>
-                <strong>Use</strong>
-            </div>
-        </div>
-        <!-- hop_entry.htm can be appended here -->
-    </div>
-    <div id='fermentable_container' class='span12 well'>
-        <h2>Grain Bill</h2>
-        <div id='grain_header'>
-            <div id='grain_name' class='span3'>
-                <strong>Name</strong>
-            </div>
-            <div id='grain_color' class='span2'>
-                <strong>Color (Lovibond)</strong>
-            </div>
-            <div id='grain_ppg' class='span3'>
-                <strong>Potential Extract (ppg)</strong>
-            </div>
-            <div id='grain_amount' class='span2'>
-                <strong>Amount (lb)</strong>
-            </div>
-            <div id='grain_use' class='span1'>
-                <strong>Use</strong>
-            </div>
-        </div>
-        <!-- grain_entry.htm can be appended here -->
-    </div>
-    <div id='yeast_container' class='span12 well'>
-        <h2>Yeast</h2>
-        <div id='yeast_header'>
-            <div class='span3'>
-                <strong>Name</strong>
-            </div>
-            <div class='span2'>
-                <strong>Flocculation</strong>
-            </div>
-            <div class='span2'>
-                <strong>Attenuation</strong>
-            </div>
-            <br>
-        </div>
-        <!-- yeast_entry.htm can be appended here -->    
-    </div>
-    <div id='misc_container' class='span12 well'>
-        <h2>Miscellaneous</h2>
-        <div class='span3'>
-            <strong>Name</strong>
-        </div>
-        <div class='span5'>
-            <strong>Description</strong>
-        </div>
-        <!-- misc_entry.htm can be appended here -->
-    </div>
-{% endblock %}

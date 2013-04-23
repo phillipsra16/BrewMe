@@ -3,21 +3,27 @@ from Recipe.models import Hop, Yeast, Fermentable
 
 
 class FermentableForm(forms.Form):
-    amount = forms.DecimalField(
-            label="Amount (lbs)",
-            max_digits=4,
-            decimal_places=2)
     ferm_name = forms.ModelChoiceField(
             widget=forms.Select(attrs={'class':'selector'}),
             label="Ingredient",
             queryset=Fermentable.objects.all())
+    amount = forms.DecimalField(
+            label="Amount (lbs)",
+            max_digits=4,
+            decimal_places=2)
     potential_extract = forms.DecimalField(
             label="PPG",
             max_digits=5,
             decimal_places=4)
     color = forms.IntegerField(
             label="Color (L)")
+    GRAIN_USES = (  ("1","Mash",),
+                    ("2","Boil",),
+                    ("3","Post-Boil",),
+                    ("4","Primary",),
+                    ("5","Secondary",))
     use = forms.CharField(
+            widget=forms.Select(choices = GRAIN_USES),
             label="Use",
             max_length=128)
 
@@ -27,10 +33,7 @@ class YeastForm(forms.Form):
             widget=forms.Select(attrs={'class':'selector'}),
             label="Yeast",
             queryset=Yeast.objects.all())
-    description = forms.CharField(
-            label="Description",
-            max_length=128)
-    flocullation = forms.CharField(
+    flocculation = forms.CharField(
             label="Flocculation",
             max_length=128)
     attenuation = forms.IntegerField(
