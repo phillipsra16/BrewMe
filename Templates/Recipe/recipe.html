@@ -2,6 +2,7 @@
 {% load bootstrap_toolkit %}
 {% block extra_head %}
 {% load static from staticfiles %}
+<script language="javascript">var STATIC_URL = "{{ STATIC_URL }}";</script>
 <script src="{% static "js/recipe.js" %}"></script>
 <style>
     form{

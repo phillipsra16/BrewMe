@@ -65,12 +65,12 @@ function id_from_name(object_name) {
         case 'recipe_box':
             return 'recipe';
         default:
-            console.log(object_name);
             return 'nothing found';
     }
 }
 
 
+//Fill out the ingredient template with data from server
 function update_ingredient(selector) {
     // We are forming our get request name and id here
     //TODO: Clean this up!
@@ -101,6 +101,35 @@ function update_ingredient(selector) {
 }
 
 
+//Display the next addition to the global recipe
+function add_read_only_template(ingredient, type) {
+    //Get this first because we will need to change the type immediately if
+    //the type is fermentable. Yay consistency!!!!
+    var add_to = '#' + type + '_box';
+    if (type == 'fermentable') 
+        type = 'grain';
+    console.log(type);
+    //Grab the template
+    $.get( STATIC_URL + type + '_entry.htm', function(template) {
+        //Create detached DOM node
+        var $tpl = $('<div />').html(template);
+        //Iterate over key, value pairs using underscore.js
+        _.each(ingredient, function(value, key) {
+            //Build up our identifier into the template and append the value
+            var identifier = '#' + type + '_' + key;
+            console.log(identifier + ' ' + value);
+            $tpl.find(identifier).html('<p><b>' + key + '</b>: ' + value);
+        });
+        console.log(add_to);
+        //Match this class of the template with the rest of our spans
+        $tpl.addClass('span12 well');
+        //Plop that shit in there
+        $tpl.insertBefore(add_to);
+    });
+}
+
+
+//Update the global recipe with the latest data from templates
 function update_recipe(data) {
     //Dictionary containing all recipe information
     target = data.target;
@@ -152,6 +181,7 @@ function update_recipe(data) {
         else
             recipe[type].push(ingredient);
         feedback('added', $(target).parent(), 'Ingredient was added');
+        add_read_only_template(ingredient, type);
     }
     console.log(recipe);
 }
@@ -165,7 +195,6 @@ function update_recipe(data) {
 function feedback_message_factory(object, message, button) {
     //TODO Finish button bullshit
     $(button).hide();
-    console.log(button);
     var element = $('<label>')
         .attr('id', 'id_message')
         .html(message);
