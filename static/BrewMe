@@ -1,0 +1,12 @@
+<VirtualHost *:80>
+        WSGIDaemonProcess BrewMe-production user=BrewMe group=BrewMe threads=10 python-path=/path/to/BrewMe/lib/python2.6/site-packages
+        WSGIProcessGroup BrewMe-production
+        WSGIScriptAlias / /home/deployer/BrewMe/releases/current/BrewMe/BrewMe.wsgi
+        <Directory /home/deployer/BrewMe/releases/current/BrewMe>
+            Order deny,allow
+            Allow from all
+        </Directory>
+        ErrorLog /var/log/apache2/error.log
+        LogLevel warn
+        CustomLog /var/log/apache2/access.log combined
+</VirtualHost>

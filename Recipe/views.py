@@ -102,6 +102,7 @@ def get_hop(request, ing_id):
         hop = Hop.objects.get(pk = ing_id)
         hop_dict= { 'use'           : str(hop.use),
                     'hop_name'      : str(hop.name),
+                    'description'   : str(hop.description),
                     'alpha_acid'    : str(hop.alpha_acid),
                     'id'            : str(hop.id),}
         return HttpResponse(simplejson.dumps(hop_dict))
@@ -114,8 +115,8 @@ def get_yeast(request, ing_id):
     # modelchoicefield
     if request.method == 'GET':
         yeast = Yeast.objects.get(pk = ing_id)
-        yeast_dict= { 'yeast_name'      : str(yeast.description),
-                      'description'     : str(yeast.name),
+        yeast_dict= { 'yeast_name'      : str(yeast.name),
+                      'description'     : str(yeast.description),
                       'flocculation'    : str(yeast.flocculation),
                       'attenuation'     : str(yeast.attenuation),
                       'id'              : str(yeast.id),}
