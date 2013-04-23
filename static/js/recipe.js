@@ -1,4 +1,4 @@
-//Global variables
+    //Global variables
 
 //Recipe that builds up as the user adds ingredients
 recipe = {
@@ -16,19 +16,41 @@ current = {
     fermentable : ''
 };
 
+        //\Global Variables
+
+    
+        //POST methods and helpers
+        
+//Validates that a recipe is ready to send
+function validate_recipe() {
+    return recipe.hop.length > 0 && recipe.yeast != null && recipe.fermentable > 0;
+}
+
 
 //Sends a post request to recipe/design view and redirects to view recipe page
 function post_recipe() {
-    recipe.meta['recipe_name'] = $('#recipe_name').val();
-    $.post(
-        "/recipe/design/",
-        {msg: JSON.stringify(recipe)},
-        function (data) {
-            ret_JSON = JSON.parse(data)
-            window.location.href = ret_JSON['url'];    
-        }
-    );
+    //Error checkign
+    if (validate_recipe()) {
+        //Set the name and send it. Upon success, go to it's view_recipe page
+        recipe.meta['recipe_name'] = $('#recipe_name').val();
+        $.post(
+            "/recipe/design/",
+            {msg: JSON.stringify(recipe)},
+            function (data) {
+                ret_JSON = JSON.parse(data)
+                window.location.href = ret_JSON['url'];    
+            }
+        );
+    } else {
+        feedback('error', $('#main_body'), 'Recipe is not completed');
+    }
 }
+
+
+        //\POST methods and helpers
+
+        
+        //Ingredient methods and helpers
 
 
 //Parses the name of the ingredient from the id
@@ -92,18 +114,26 @@ function update_recipe(data) {
     //I.E. for each attribute describing this ingredient, fill out the ingredient dict with the value
     add_ingredient = true;
     _.each($(target).parent().children('form').children('p').children('input'), function (data) {
+        //Error checking. If we don't have a value we need, provide feedback and 
+        //set condition to break out of method
         if ($(data).val() == '' && add_ingredient) {
             feedback('error', $(target).parent(), 'Please fill out all of the data');
             add_ingredient = false;
             return;
         }
+        //If we pass error condition above, add this label and value to the dict
         var label = $(data).attr('name');
-        console.log(label + ", " + $(data).val())
         ingredient[label] = $(data).val();
     });
+    //For Quality of life on backend
     ingredient.id = current[type]; 
+    //First off, i apologize
+    //Secondly, grab the name of the ingredient from the selector. I did it this way
+    //to make this method agnostic to the ingredient type calling it
     var val = $(target).parent().children('form').children('p').children('select').children(':selected').html();
 
+
+    //TODO Make this agnostic
     // ******************************************************************
     // make sure hop time is recorded
     ingredient.time = $('#id_time').val();
@@ -111,10 +141,11 @@ function update_recipe(data) {
     ingredient.use = $('#id_use').val();
     // ******************************************************************
     
-    if (val == null) {
-        return;
-    }
+    if (val == null) return;
+
     ingredient.name = val;
+    //If error condition in _.each loop wasn't triggered, we can add the yeast and send
+    //this bad boy off and provide feedback
     if (add_ingredient) {
         if (type == 'yeast')
             recipe['yeast'] = ingredient;
@@ -126,34 +157,46 @@ function update_recipe(data) {
 }
 
 
-//Creates a message and binds a focus event to remove the message
-function feedback_message_factory(object, message) {
+/*Creates a message and binds a focus event to remove the message
+                                    --------------------- Object calling this
+                                    |       ------------- Message to display
+                                    |       |       ----- Button to hide
+                                    |       |       |   */
+function feedback_message_factory(object, message, button) {
+    //TODO Finish button bullshit
+    $(button).hide();
+    console.log(button);
     var element = $('<label>')
         .attr('id', 'id_message')
         .html(message);
     $(object).prepend(element);
     $(object).on('focus', 'input, select', function () {
-        console.log('remove');
+        $(button).show();
         $('#id_message').remove();
     });
 }
 
 
-//Provides user feedback
+/*Provides user feedback
+ *                  ------------------- Type of method ('error', 'added')
+ *                  |       ----------- Object calling this
+ *                  |       |       --- Message to display
+ *                  |       |       |   */ 
 function feedback(type, object, message) {
     focus_time = 2500;
     var initial_color = $(object).css('background-color');
+    sub_button = $(object).children('submit');
     switch (type) {
         case 'added':
             $(object).css('background-color', 'green');
-            feedback_message_factory(object, message);
+            feedback_message_factory(object, message, sub_button);
             $(object).animate({
                 'background-color' : initial_color
             }, focus_time);
             break;
         case 'error':
             $(object).css('background-color', 'red');
-            feedback_message_factory(object, message);
+            feedback_message_factory(object, message, sub_button);
             $(object).animate({
                 'background-color' : initial_color
             }, focus_time);
@@ -163,6 +206,12 @@ function feedback(type, object, message) {
     }
 
 }
+
+
+        //\Ingredient methods and helpers
+        
+
+        //Boilerplate stuff
 
 
 $(document).ready(function() {
