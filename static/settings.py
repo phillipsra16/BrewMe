@@ -70,6 +70,7 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 #    '/home/deployer/static',
+    '/home/wyattpj/dev/BrewMe/Home_Screen/static',
     '/home/wyattpj/dev/BrewMe/Recipe/static',
     os.path.join(SITE_ROOT),
 )

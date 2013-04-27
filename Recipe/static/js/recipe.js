@@ -60,6 +60,7 @@ function update_ingredient(selector) {
     //if (ingre_type == 'nothing found') //Something went wrong
     //    return;
     var ingre_id = $(ingredient).children(':selected').val();
+    //TODO: Make url a static string
     url_base = 'http://66.169.77.204:8001/recipe/';
     $.ajax({
         type:'GET',

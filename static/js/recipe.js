@@ -8,6 +8,7 @@ recipe = {
     meta        : {}, //Recipe metadata
 };
 
+var well_color;
 
 //Dictionaries that store the id of the currently worked on ingredients
 current = {
@@ -95,7 +96,42 @@ function update_ingredient(selector) {
 }
 
 
+
+
+function add_read_only_template(ingredient, type) {
+    //Get this first because we will need to change the type immediately if
+    //the type is fermentable. Yay consistency!!!!
+    var add_to = '#' + type + '_box';
+    if (type == 'fermentable') 
+        type = 'grain';
+    console.log(type);
+    //Grab the template
+    $.get( STATIC_URL + type + '_entry.htm', function(template) {
+        //Create detached DOM node
+        var $tpl = $('<div />').html(template);
+        //$($tpl).removeClass('span12 well');
+        //Iterate over key, value pairs using underscore.js
+        _.each(ingredient, function(value, key) {
+            //Build up our identifier into the template and append the value
+            var identifier = '#' + type + '_' + key;
+            console.log(identifier + ' ' + value);
+            $tpl.find(identifier).html('<p><b>' + key + '</b>: ' + value);
+        });
+        console.log(add_to);
+        //Match this class of the template with the rest of our spans
+        //$tpl.addClass('span12 well');
+        $tpl.css('clear', 'left'); 
+        //Plop that shit in there
+        //$tpl.insertBefore(add_to);
+        $(add_to).append($tpl);
+    });
+}
+
 function update_recipe(data) {
+    //End any feedback animations
+    $('#id_message').parent().stop();
+    $('#id_message').parent().css('background-color', well_color);
+    $('#id_message').remove();
     //Dictionary containing all recipe information
     target = data.target;
     var type = id_from_name($(target).parent().attr('id'));
@@ -146,9 +182,9 @@ function update_recipe(data) {
         else
             recipe[type].push(ingredient);
         feedback('added', $(target).parent(), 'Ingredient was added');
+        add_read_only_template(ingredient, type);
     }
     console.log(recipe);
-    console.log('here');
 }
 
 
@@ -168,20 +204,20 @@ function feedback_message_factory(object, message) {
 //Provides user feedback
 function feedback(type, object, message) {
     focus_time = 2500;
-    var initial_color = $(object).css('background-color');
+    $(object).stop();
     switch (type) {
         case 'added':
             $(object).css('background-color', 'green');
             feedback_message_factory(object, message);
             $(object).animate({
-                'background-color' : initial_color
+                'background-color' : well_color
             }, focus_time);
             break;
         case 'error':
             $(object).css('background-color', 'red');
             feedback_message_factory(object, message);
             $(object).animate({
-                'background-color' : initial_color
+                'background-color' : well_color
             }, focus_time);
             break;
         default:
@@ -200,6 +236,7 @@ $(document).ready(function() {
     $('#id_yeast_name').css('width','150px');
     $('#id_hop_name,#id_time,#id_use,#id_alpha_acid,#id_amount').
             css('margin-right','5px');
+    well_color = $('#hop_box').css('background-color');
 
 
     //Register event listeners
