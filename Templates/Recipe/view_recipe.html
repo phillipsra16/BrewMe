@@ -18,7 +18,22 @@ $(function() {
     display_yeast();
     display_misc();
     display_stats();
+
+    $('input[type=submit]').on('click', post_comment);
+    console.log(recipe);
 }); // end jQuery.ready
+
+function post_comment() {
+    $.post(
+        "/recipe/view_recipe/" + recipe.rec_id + '/',
+        {comm : $('#id_comm_text').val()},
+        function(data) {
+            ret_json = JSON.parse(data);
+            // TODO add comment entry callback
+            console.log(ret_json);
+        }
+    );
+}
 
 // fills a hop entry template
 // TODO: Abstract and make agnostic
@@ -137,7 +152,7 @@ function calc_og() {
         var tmp = parseFloat(grain.amount) * parseInt(pts) * 0.75 / 5.5;
         SG += tmp;
     });
-    if (og < 100) {
+    if (SG < 100) {
         og = "1.0" + Math.round(SG);
     } else {
         og = "1." + Math.round(SG);
@@ -184,6 +199,43 @@ function calc_color() {
     return Math.round(color);
 }
 
+//Django provided ajax send
+$(document).ajaxSend(function(event, xhr, settings) {
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    function sameOrigin(url) {
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+    function safeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
+});
 </script>
 {% endblock %}
 {% block content %}
@@ -263,5 +315,12 @@ function calc_color() {
             <strong>Description</strong>
         </div>
         <!-- misc_entry.htm can be appended here -->
+    </div>
+    <div id='comment_container' class='span12 well'>
+        <h2>Comments</h2>
+        <form id='comment_form'>{% csrf_token %}
+            {{ comment_form.as_p }}
+        </form>
+        <input type="submit" value="Submit Comment" id="sub_comment" />
     </div>
 {% endblock %}
