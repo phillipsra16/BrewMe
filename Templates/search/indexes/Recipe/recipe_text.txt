@@ -1,0 +1,4 @@
+{{ object.name }}
+{{ object.user_name }}
+{{ object.style_id }}
+{{ object.url }}
