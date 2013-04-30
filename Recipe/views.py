@@ -244,7 +244,7 @@ def get_comments(request, rec_id):
     for entry in comments:
         if entry.active == True:
             comment_dict = {
-                    'username'      : User.objects.get(pk = entry.user_id).username,
+                    'username'      : User.objects.get(username = entry.user_id).username,
                     'comment_text'  : entry.text}
             comment_list.append(comment_dict)
 
