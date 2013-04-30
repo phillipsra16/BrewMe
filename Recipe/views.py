@@ -155,6 +155,7 @@ def get_recipe(request, rec_id):
             'recipe_dict'   : simplejson.dumps(recipe_dict),
             'comment_form'  : comment_form,
             }, context_instance=RequestContext(request))
+
     else: # POST request
         # get the current user id and the comment that was POSTed
         print("in POST")
