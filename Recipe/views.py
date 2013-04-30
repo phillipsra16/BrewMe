@@ -214,3 +214,14 @@ def get_yeast_for_recipe(rec_id):
                    'flocculation'   : yeast.flocculation,
                    'attenuation'    : yeast.attenuation}
     return yeast_dict
+
+
+def search_recipes(request):
+    recipes = 'Nothing Found'
+    search_term = request.GET.get('q','')
+    if query:
+        results = SearchQuerySet().auto_query(search_term)
+        recipes = []
+        for r in recipes:
+            recipes.append(r.object)
+    return HttpResponse(recipes)

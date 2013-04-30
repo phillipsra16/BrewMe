@@ -9,6 +9,7 @@ BrewMe.egg-info/dependency_links.txt
 BrewMe.egg-info/requires.txt
 BrewMe.egg-info/top_level.txt
 Home_Screen/__init__.py
+Home_Screen/forms.py
 Home_Screen/models.py
 Home_Screen/tests.py
 Home_Screen/urls.py
@@ -21,6 +22,8 @@ Recipe/urls.py
 Recipe/views.py
 Recipe/migrations/0001_initial.py
 Recipe/migrations/0002_auto__add_field_recipe_parent_id.py
+Recipe/migrations/0003_auto__chg_field_hopschedule_amount__chg_field_hopschedule_time__add_fi.py
+Recipe/migrations/0003_auto__chg_field_hopschedule_amount__chg_field_hopschedule_time__chg_fi.py
 Recipe/migrations/__init__.py
 User_Auth/__init__.py
 User_Auth/forms.py
@@ -32,3 +35,7 @@ User_Auth/migrations/0001_initial.py
 User_Auth/migrations/0002_initial.py
 User_Auth/migrations/0003_auto__add_userprofile.py
 User_Auth/migrations/__init__.py
+static/__init__.py
+static/settings.py
+static/urls.py
+static/wsgi.py

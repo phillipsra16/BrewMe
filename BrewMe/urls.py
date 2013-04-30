@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     url(r'^user/', include('User_Auth.urls')),
     url(r'^home/', include('Home_Screen.urls')),
     url(r'^recipe/', include('Recipe.urls')),
+    url(r'^search/', include('haystack.urls')),
     #url(r'^static/(?P<path>.*)$', 'django.views.static.serve',
     #    {'document_root', settings.STATIC_ROOT}
     #),

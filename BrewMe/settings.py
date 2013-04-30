@@ -130,6 +130,9 @@ INSTALLED_APPS = (
     'Recipe',
     'Home_Screen',
     'ajax_select',
+    'haystack',
+    #Not sure if i need this
+    #'BrewMe_index',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
@@ -176,3 +179,16 @@ LOGIN_URL = '/user/'
 AJAX_LOOKUP_CHANNELS = {
         'Hop Variety' : {'model' : 'Recipe.Hops', 'search_field' : 'name'}
         }
+
+#Haystack setup
+HAYSTACK_SITECONF = 'BrewMe.search_sites'
+HAYSTACK_SEARCH_ENGINE = 'whoosh'
+HAYSTACK_WHOOSH_PATH = '/home/wyattpj/dev/BrewMe/index'
+
+#Haystack 2.0.0. We're using 1.2.7
+"""HAYSTACK_CONNECTIONS = {
+    'default' : {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH'  : os.path.join(os.path.dirname(__file__), 'whoosh_index'),    
+        }
+}"""
