@@ -110,3 +110,8 @@ class HopForm(forms.Form):
             max_digits=3,
             decimal_places=1)
 
+class CommentForm(forms.Form):
+    comm_text = forms.CharField(
+            label="Insert Comment:",
+            widget=forms.Textarea(),
+            max_length=1024)

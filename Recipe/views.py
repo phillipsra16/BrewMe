@@ -1,5 +1,6 @@
 from django.shortcuts import render_to_response, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.views.decorators.cache import never_cache
 from django.http import HttpResponseRedirect, HttpResponse
 from django import forms
@@ -141,16 +142,36 @@ def get_fermentable(request, ing_id):
 
 @never_cache
 def get_recipe(request, rec_id):
-    recipe_dict = { 'recipe_name'   : str(Recipe.objects.get(pk = rec_id)),
-                    'hop_schedule'  : get_hop_schedule(rec_id),
-                    'grain_bill'    : get_grain_bill(rec_id),
-                    'yeast'         : get_yeast_for_recipe(rec_id),
-                    'misc'          : get_misc_for_recipe(rec_id)}
-    #return HttpResponse(simplejson.dumps(recipe_dict))
-    return render_to_response('view_recipe.html', {
-        'recipe_dict' : simplejson.dumps(recipe_dict),
-        }, context_instance=RequestContext(request))
+    if request.method == 'GET':
+        comment_form = CommentForm()
+        recipe_dict = { 'recipe_name'   : str(Recipe.objects.get(pk = rec_id)),
+                        'hop_schedule'  : get_hop_schedule(rec_id),
+                        'grain_bill'    : get_grain_bill(rec_id),
+                        'yeast'         : get_yeast_for_recipe(rec_id),
+                        'misc'          : get_misc_for_recipe(rec_id),
+                        'comments'      : get_comments(request, rec_id),
+                        'rec_id'        : rec_id}
+        return render_to_response('view_recipe.html', {
+            'recipe_dict'   : simplejson.dumps(recipe_dict),
+            'comment_form'  : comment_form,
+            }, context_instance=RequestContext(request))
+    else: # POST request
+        # get the current user id and the comment that was POSTed
+        print("in POST")
+        user_id = request.session['user_id']
+        print(user_id)
+        comment = request.POST.get('comm', '')
 
+        # saving comment in the database
+        new_Comment = Comments()
+        new_Comment.user_id     = User.objects.get(id = user_id)
+        new_Comment.recipe_id   = Recipe.objects.get(id = rec_id)
+        new_Comment.active      = True
+        new_Comment.text        = comment
+        new_Comment.save()
+
+        # on success we send back the comment
+        return HttpResponse(simplejson.dumps({'comm' : comment}))
 
 def get_hop_schedule(rec_id):
     # We need a hop schedule for a given recipe
@@ -207,7 +228,6 @@ def get_misc_for_recipe(rec_id):
 def get_yeast_for_recipe(rec_id):
     # This gets the yeast associated with a particular recipe.
     yeast_id = Recipe.objects.get(pk = rec_id).yeast_id
-    print(yeast_id)
     yeast = Yeast.objects.get(name = yeast_id)
     yeast_dict = { 'name'           : yeast.name,
                    'description'    : yeast.description,
@@ -215,6 +235,7 @@ def get_yeast_for_recipe(rec_id):
                    'attenuation'    : yeast.attenuation}
     return yeast_dict
 
+<<<<<<< HEAD
 
 def search_recipes(request):
     recipes = 'Nothing Found'
@@ -225,3 +246,19 @@ def search_recipes(request):
         for r in recipes:
             recipes.append(r.object)
     return HttpResponse(recipes)
+=======
+def get_comments(request, rec_id):
+    # returns a list of usernames and comments associated with a recipe
+    user_id = request.session['user_id']
+    comments = Comments.objects.filter(recipe_id = rec_id)
+    comment_list = []
+
+    for entry in comments:
+        if entry.active == True:
+            comment_dict = {
+                    'username'      : User.objects.get(username = entry.user_id).username,
+                    'comment_text'  : entry.text}
+            comment_list.append(comment_dict)
+
+    return comment_list
+>>>>>>> b92a23293ef4e8e081fc2893ac6173e04a0eafd1
