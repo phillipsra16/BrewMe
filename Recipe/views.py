@@ -235,7 +235,6 @@ def get_yeast_for_recipe(rec_id):
                    'attenuation'    : yeast.attenuation}
     return yeast_dict
 
-<<<<<<< HEAD
 
 def search_recipes(request):
     recipes = 'Nothing Found'
@@ -246,7 +245,8 @@ def search_recipes(request):
         for r in recipes:
             recipes.append(r.object)
     return HttpResponse(recipes)
-=======
+
+
 def get_comments(request, rec_id):
     # returns a list of usernames and comments associated with a recipe
     user_id = request.session['user_id']
@@ -261,4 +261,3 @@ def get_comments(request, rec_id):
             comment_list.append(comment_dict)
 
     return comment_list
->>>>>>> b92a23293ef4e8e081fc2893ac6173e04a0eafd1
