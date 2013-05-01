@@ -1,5 +1,6 @@
 setup.py
 BrewMe/__init__.py
+BrewMe/search_sites.py
 BrewMe/settings.py
 BrewMe/urls.py
 BrewMe/wsgi.py
@@ -17,6 +18,7 @@ Home_Screen/views.py
 Recipe/__init__.py
 Recipe/forms.py
 Recipe/models.py
+Recipe/search_indexes.py
 Recipe/tests.py
 Recipe/urls.py
 Recipe/views.py

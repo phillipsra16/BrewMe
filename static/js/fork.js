@@ -1,7 +1,6 @@
 // Forked recipe
 // add the recipe information to the recipe that is being designed
 $(function() {
-        console.log("in fork.js" + recipe_dict);
     if (recipe_dict) {
         _.each(recipe_dict.hop_schedule, function(hop) {
             recipe.hop.push(hop);

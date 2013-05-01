@@ -213,8 +213,11 @@ function hop_util(time) {
 function calc_ibu() {
     var ibu = 0;
     _.each(recipe_dict.hop_schedule, function(hop) {
-        var tmp = hop.amount * hop.alpha_acid * hop_util(hop.time) * 75 / 5.5;
+        var tmp = parseFloat(hop.amount) * 
+                  parseFloat(hop.alpha_acid) * 
+                  parseFloat(hop_util(parseInt(hop.time))) * 75 / 5.5;
         ibu += tmp;
+        console.log(ibu);
     });
     return Math.round(ibu);
 }

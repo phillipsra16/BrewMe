@@ -8,4 +8,4 @@ pil
 fabric
 django-ajax-selects
 django-haystack
-Whoosh
+whoosh
