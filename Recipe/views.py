@@ -54,6 +54,7 @@ def recipe_design(request):
             my_grain.save()
 
         for hop in recipe_dict['hop']:
+            print(hop)
             my_hop              = HopSchedule()
             my_hop.recipe_id    = my_recipe
             my_hop.hop_id       = Hop.objects.get(pk = hop['id'])
@@ -141,7 +142,7 @@ def get_fermentable(request, ing_id):
 
 
 @never_cache
-def get_recipe(request, rec_id):
+def get_recipe(request, rec_id):   
     if request.method == 'GET':
         comment_form = CommentForm()
         recipe_dict = { 'recipe_name'   : str(Recipe.objects.get(pk = rec_id)),
@@ -151,13 +152,25 @@ def get_recipe(request, rec_id):
                         'misc'          : get_misc_for_recipe(rec_id),
                         'comments'      : get_comments(request, rec_id),
                         'rec_id'        : rec_id}
-        return render_to_response('view_recipe.html', {
+        if request.GET.get('fork'):
+            fermentable_form = FermentableForm()
+            hop_form = HopForm()
+            yeast_form = YeastForm()
+            misc_form = MiscForm()
+            return render_to_response('fork.html', {
+                'recipe_dict'   : simplejson.dumps(recipe_dict),
+                'hop_form' : hop_form,
+                'fermentable_form' : fermentable_form,
+                'yeast_form' : yeast_form,
+                'misc_form' : misc_form,
+                }, context_instance=RequestContext(request))
+        else:
+            return render_to_response('view_recipe.html', {
             'recipe_dict'   : simplejson.dumps(recipe_dict),
             'comment_form'  : comment_form,
             }, context_instance=RequestContext(request))
     else: # POST request
         # get the current user id and the comment that was POSTed
-        print("in POST")
         user_id = request.session['user_id']
         print(user_id)
         comment = request.POST.get('comm', '')
@@ -183,11 +196,13 @@ def get_hop_schedule(rec_id):
 
     for entry in hop_sched:
         hop = Hop.objects.get(name = entry.hop_id)
-        hop_dict = { 'name'         : hop.name,
+        hop_dict = { 'name'         : str(hop.name),
                      'alpha_acid'   : str(hop.alpha_acid),
-                     'time'         : entry.time,
+                     'time'         : str(entry.time),
                      'amount'       : str(entry.amount),
-                     'use'          : entry.use}
+                     'use'          : str(entry.use),
+                     'id'           : str(Hop.objects.get(
+                                      name = entry.hop_id).id)}
         hop_sched_list.append(hop_dict)
     return hop_sched_list
 
@@ -203,11 +218,13 @@ def get_grain_bill(rec_id):
         # TODO: FIX THE FUCKIN DATABASE!!!  
         grain_set = list(Fermentable.objects.filter(name = entry.fermentable_id))
         grain = grain_set[0]
-        grain_dict = { 'name'       : grain.name,
-                       'color'      : grain.color,
-                       'ppg'        : str(grain.potential_extract),
-                       'amount'     : str(entry.amount),
-                       'use'        : entry.use}
+        grain_dict = { 'name'               : str(grain.name),
+                       'color'              : str(grain.color),
+                       'potential_extract'  : str(grain.potential_extract),
+                       'amount'             : str(entry.amount),
+                       'use'                : str(entry.use),
+                       'id'                 : str(Fermentable.objects.get(
+                                              name = entry.fermentable_id).id)}
         grain_list.append(grain_dict)
     return grain_list
 

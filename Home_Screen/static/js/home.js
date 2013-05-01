@@ -11,7 +11,7 @@ function fill_user_recipes() {
                     //Handle id => href url
                     if (key == 'id') {
                         console.log($tpl);
-                        $tpl.prop('href','http://66.169.77.204:8001/recipe/view_recipe/' + value);
+                        $tpl.prop('href','http://66.169.77.204:8000/recipe/view_recipe/' + value);
                         console.log(value);
                     }
                     else { 

@@ -1,7 +1,7 @@
 //Global variables
 
 //Recipe that builds up as the user adds ingredients
-recipe = {
+var recipe = {
     hop         : [], //List of Dictionaries of hop ingredients
     yeast       : {}, //Dictionary of yeast ingredients
     fermentable : [], //List of Dictionaries of fermentable ingredients
@@ -61,7 +61,7 @@ function update_ingredient(selector) {
     //    return;
     var ingre_id = $(ingredient).children(':selected').val();
     //TODO: Make url a static string
-    url_base = 'http://66.169.77.204:8001/recipe/';
+    url_base = 'http://66.169.77.204:8000/recipe/';
     $.ajax({
         type:'GET',
         url: url_base + ingre_type + '/' + ingre_id + '/',

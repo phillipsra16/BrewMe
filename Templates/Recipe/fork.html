@@ -2,8 +2,13 @@
 {% load bootstrap_toolkit %}
 {% block extra_head %}
 {% load static from staticfiles %}
-<script language="javascript">var STATIC_URL = "{{ STATIC_URL }}";</script>
+<script language="javascript">
+    var STATIC_URL = "{{ STATIC_URL }}";
+    var recipe_dict = {{ recipe_dict|safe }};
+</script>
 <script src="{% static "js/recipe.js" %}"></script>
+<script src="{% static "js/view_recipe.js" %}"></script>
+<script src="{% static "js/fork.js" %}"></script>
 <style>
     form{
         width: 100%;
@@ -31,23 +36,27 @@
             {{ hop_form.as_p }}
         </form>
         <input type="submit" value="Add hop" style="visibility:hidden" id="sub_hop" />
+        <div id='hop_container' class='span12'></div>
     </div>
     <div id='fermentable_box' class='span12 well'>
         <form id='fermentable_row'>{% csrf_token %}
             {{ fermentable_form.as_p }}
         </form>
         <input type="submit" value="Add Fermentable" style="visibility:hidden" id="sub_fermentable" />
+        <div id='fermentable_container' class='span12'></div>
     </div>
     <div id='yeast_box' class='span12 well'>
         <form id='yeast_row'>{% csrf_token %}
 		    {{ yeast_form.as_p }}
         </form>
         <input type="submit" value="Add Yeast" style="visibility:hidden" id="sub_yeast" />
+        <div id='yeast_container' class='span12'></div>
     </div>
     <div id='misc_box' class='span12 well'>
-	<form id='misc_row'>{% csrf_token %}
-		{{ misc_form.as_p }}
-    </form>
+        <form id='misc_row'>{% csrf_token %}
+            {{ misc_form.as_p }}
+        </form>
+        <div id='misc_container' class='span12'></div>
     </div>
     <div id='recipe_box'>
         <input type="submit" value="Create Recipe!" id="sub_recipe"/>
