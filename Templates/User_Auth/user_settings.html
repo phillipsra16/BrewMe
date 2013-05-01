@@ -4,16 +4,16 @@
     {{ state }}
     <form action="/user/settings/" method="post" class="form-horizontal">{% csrf_token %}
         {{ email_form.as_p }}
-        <input type="submit" name="type" value="Change Email"/>
+        <input type="submit" name="type" class="btn" value="Change Email"/>
     </form>
 
     <form action="/user/settings/" method="post" class="form-horizontal">{% csrf_token %}
         {{ password_form.as_p }}
-        <input type="submit" name="type" value="Change Password"/>
+        <input type="submit" name="type" class="btn" value="Change Password"/>
     </form>
 
     <form action="/user/settings/" method="post" class="form-horizontal">{% csrf_token %}
         {{ image_form.as_p }}
-        <input type="submit" name="type" value="Change Avatar"/>
+        <input type="submit" name="type" class="btn" value="Change Avatar"/>
     </form>
 {% endblock %}

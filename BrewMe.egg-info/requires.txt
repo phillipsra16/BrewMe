@@ -7,4 +7,5 @@ django-bootstrap-toolkit
 pil
 fabric
 django-ajax-selects
-django-autocomplete-light
+django-haystack
+Whoosh

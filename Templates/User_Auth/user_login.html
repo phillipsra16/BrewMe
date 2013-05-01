@@ -4,10 +4,10 @@
     {{ state }}
     <form action="/user/" method="post" class="form-horizontal">{% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Log in"/>
+        <input type="submit" class="btn-primary" value="Log in"/>
     </form>
     
     <form action="/user/create" method="get">
-        <input type="submit" value="Create A New User"/>
+        <input type="submit" class="btn-primary" value="Create A New User"/>
     </form>
 {% endblock %}

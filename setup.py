@@ -18,6 +18,8 @@ if __name__ == '__main__':
                 pil
                 fabric
                 django-ajax-selects
+                django-haystack
+                whoosh
             """,
             include_package_data=True,
         )

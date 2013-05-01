@@ -58,7 +58,7 @@ SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = '/home/phillipsra1/dev/BrewMe/static/'
+STATIC_ROOT = '/home/wyattpj/dev/BrewMe/static/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -70,8 +70,8 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 #    '/home/deployer/static',
-    '/home/phillipsra1/dev/BrewMe/Home_Screen/static',
-    '/home/phillipsra1/dev/BrewMe/Recipe/static',
+    '/home/wyattpj/dev/BrewMe/Home_Screen/static',
+    '/home/wyattpj/dev/BrewMe/Recipe/static',
     os.path.join(SITE_ROOT),
 )
 
@@ -110,10 +110,10 @@ ROOT_URLCONF = 'BrewMe.urls'
 WSGI_APPLICATION = 'BrewMe.wsgi.application'
 
 TEMPLATE_DIRS = (
-        '/home/phillipsra1/dev/BrewMe/Templates',
-        '/home/phillipsra1/dev/BrewMe/Templates/User_Auth',
-        '/home/phillipsra1/dev/BrewMe/Templates/Home_Screen',
-        '/home/phillipsra1/dev/BrewMe/Templates/Recipe',
+        '/home/wyattpj/dev/BrewMe/Templates',
+        '/home/wyattpj/dev/BrewMe/Templates/User_Auth',
+        '/home/wyattpj/dev/BrewMe/Templates/Home_Screen',
+        '/home/wyattpj/dev/BrewMe/Templates/Recipe',
 )
 
 INSTALLED_APPS = (
@@ -130,6 +130,9 @@ INSTALLED_APPS = (
     'Recipe',
     'Home_Screen',
     'ajax_select',
+    'haystack',
+    #Not sure if i need this
+    #'BrewMe_index',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
@@ -165,8 +168,9 @@ LOGGING = {
 
 # Static bootstrap urls
 BOOTSTRAP_BASE_URL      = 'http://twitter.github.io/bootstrap/assets/'
-BOOTSTRAP_CSS_BASE_URL  = BOOTSTRAP_BASE_URL + 'css/'
-BOOTSTRAP_CSS_URL       = BOOTSTRAP_CSS_BASE_URL + 'bootstrap.css'
+BOOTSTRAP_CSS_URL       = 'http://bootswatch.com/united/bootstrap.min.css'
+#BOOTSTRAP_CSS_BASE_URL  = BOOTSTRAP_BASE_URL + 'css/'
+#BOOTSTRAP_CSS_URL       = BOOTSTRAP_CSS_BASE_URL + 'bootstrap.css'
 BOOTSTRAP_JS_BASE_URL   = BOOTSTRAP_BASE_URL + 'js/'
 
 # Used by login_required decorator
@@ -176,3 +180,16 @@ LOGIN_URL = '/user/'
 AJAX_LOOKUP_CHANNELS = {
         'Hop Variety' : {'model' : 'Recipe.Hops', 'search_field' : 'name'}
         }
+
+#Haystack setup
+HAYSTACK_SITECONF = 'BrewMe.search_sites'
+HAYSTACK_SEARCH_ENGINE = 'whoosh'
+HAYSTACK_WHOOSH_PATH = '/home/wyattpj/dev/BrewMe/index'
+
+#Haystack 2.0.0. We're using 1.2.7
+"""HAYSTACK_CONNECTIONS = {
+    'default' : {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH'  : os.path.join(os.path.dirname(__file__), 'whoosh_index'),    
+        }
+}"""

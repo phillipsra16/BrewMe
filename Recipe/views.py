@@ -169,6 +169,7 @@ def get_recipe(request, rec_id):
             'recipe_dict'   : simplejson.dumps(recipe_dict),
             'comment_form'  : comment_form,
             }, context_instance=RequestContext(request))
+
     else: # POST request
         # get the current user id and the comment that was POSTed
         user_id = request.session['user_id']
@@ -251,6 +252,18 @@ def get_yeast_for_recipe(rec_id):
                    'flocculation'   : yeast.flocculation,
                    'attenuation'    : yeast.attenuation}
     return yeast_dict
+
+
+def search_recipes(request):
+    recipes = 'Nothing Found'
+    search_term = request.GET.get('q','')
+    if query:
+        results = SearchQuerySet().auto_query(search_term)
+        recipes = []
+        for r in recipes:
+            recipes.append(r.object)
+    return HttpResponse(recipes)
+
 
 def get_comments(request, rec_id):
     # returns a list of usernames and comments associated with a recipe

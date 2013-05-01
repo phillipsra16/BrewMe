@@ -22,36 +22,43 @@
         display: block;
         float:left;
     }
+    #recipe_name{
+        width: 30%;
+        float: right;
+    }
+    input{
+        text-align: center;
+    }
 </style>
 {% endblock %}
 {% block content %}
 <div id='template' style="visibility:hidden; float:right;"></div>
+    <div id='recipe_box' class="span12 well">
+        <label for="recipe_name">Recipe Name</label><input type="text" class="input-xlarge" name="name" placeholder="{{ user.username }}'s totally awesome beer!" id="recipe_name">
+    </div>
     <div id='hop_box' class='span12 well'>
         <form id='hop_row'>{% csrf_token %}
             {{ hop_form.as_p }}
         </form>
-        <input type="submit" value="Add hop" style="visibility:hidden" id="sub_hop" />
+        <input type="submit" class="btn" value="Add hop" style="visibility:hidden" id="sub_hop" />
     </div>
     <div id='fermentable_box' class='span12 well'>
         <form id='fermentable_row'>{% csrf_token %}
             {{ fermentable_form.as_p }}
         </form>
-        <input type="submit" value="Add Fermentable" style="visibility:hidden" id="sub_fermentable" />
+        <input type="submit" class="btn" value="Add Fermentable" style="visibility:hidden" id="sub_fermentable" />
     </div>
     <div id='yeast_box' class='span12 well'>
         <form id='yeast_row'>{% csrf_token %}
 		    {{ yeast_form.as_p }}
         </form>
-        <input type="submit" value="Add Yeast" style="visibility:hidden" id="sub_yeast" />
+        <input type="submit" class="btn" value="Add Yeast" style="visibility:hidden" id="sub_yeast" />
     </div>
     <div id='misc_box' class='span12 well'>
 	<form id='misc_row'>{% csrf_token %}
 		{{ misc_form.as_p }}
     </form>
-    </div>
-    <div id='recipe_box'>
-        <input type="submit" value="Create Recipe!" id="sub_recipe"/>
-        <label for="recipe_name">Recipe Name</label><input type="text" name="name" id="recipe_name">
+    <input type="submit" class="btn-primary" value="Create Recipe!" id="sub_recipe"/>
     </div>
 </div>
 {% endblock %} 
