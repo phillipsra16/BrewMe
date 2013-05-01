@@ -202,8 +202,7 @@ def get_hop_schedule(rec_id):
                      'time'         : str(entry.time),
                      'amount'       : str(entry.amount),
                      'use'          : str(entry.use),
-                     'id'           : str(Hop.objects.get(
-                                      name = entry.hop_id).id)}
+                     'id'           : str(hop.id)}
         hop_sched_list.append(hop_dict)
     return hop_sched_list
 
@@ -224,8 +223,7 @@ def get_grain_bill(rec_id):
                        'potential_extract'  : str(grain.potential_extract),
                        'amount'             : str(entry.amount),
                        'use'                : str(entry.use),
-                       'id'                 : str(Fermentable.objects.get(
-                                              name = entry.fermentable_id).id)}
+                       'id'                 : str(grain.id)}
         grain_list.append(grain_dict)
     return grain_list
 
