@@ -10,8 +10,6 @@ $(function() {
 
     $('input[type=submit]').on('click', post_comment);
     $('#fork_btn').on('click', function() {
-        var data = {'fork' : true};
-        console.log(data);
         $.get(
             document.URL,   // the view_recipe function will respond with
                             //      the fork page
@@ -226,7 +224,7 @@ function calc_color() {
     var color = 0;
     _.each(recipe_dict.grain_bill, function(grain) {
         var tmp = grain.amount * grain.color / 5.5;
-        color = 1.4922 * Math.pow(tmp, 0.6859);
+        color += 1.4922 * Math.pow(tmp, 0.6859);
     });
     return Math.round(color);
 }

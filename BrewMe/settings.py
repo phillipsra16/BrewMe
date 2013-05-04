@@ -168,7 +168,7 @@ LOGGING = {
 
 #Site URL
 #Change this to change the port you are working on
-SITE_URL = 'http://66.169.77.204:8001'
+SITE_URL = 'http://66.169.77.204:8000'
 
 # Static bootstrap urls
 BOOTSTRAP_BASE_URL      = 'http://twitter.github.io/bootstrap/assets/'

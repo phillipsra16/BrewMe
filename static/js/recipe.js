@@ -192,34 +192,37 @@ function update_recipe(data) {
 //Creates a message and binds a focus event to remove the message
 function feedback_message_factory(object, message) {
     var element = $('<label>')
-        .attr('id', 'id_message')
+        .attr({
+            id:'id_message',
+            style:'display:hidden',
+        })
         .html(message);
     $(object).prepend(element);
-    $(object).on('focus', 'input, select', function () {
-        console.log('remove');
-        $('#id_message').remove();
-    });
 }
 
 
 //Provides user feedback
 function feedback(type, object, message) {
-    focus_time = 2500;
+    focus_time = 2000;
     $(object).stop();
     switch (type) {
         case 'added':
-            $(object).css('background-color', 'green');
             feedback_message_factory(object, message);
-            $(object).animate({
-                'background-color' : well_color
-            }, focus_time);
+            $('#id_message').addClass('alert alert-success');
+            $('#id_message').fadeIn(500, function() {
+                $('#id_message').slideUp(focus_time, function() {
+                    $('#id_message').remove();
+                });
+            });
             break;
         case 'error':
-            $(object).css('background-color', 'red');
             feedback_message_factory(object, message);
-            $(object).animate({
-                'background-color' : well_color
-            }, focus_time);
+            $('#id_message').addClass('alert alert-error');
+            $('#id_message').fadeIn(500, function() {
+                $('#id_message').slideUp(focus_time, function() {
+                    $('#id_message').remove();
+                });
+            });
             break;
         default:
             console.log(type + " " + object + " " + message);
@@ -229,14 +232,6 @@ function feedback(type, object, message) {
 
 
 $(document).ready(function() {
-    // make the time select field from being too large
-    $('#id_time').css('width','55px');
-    $('#id_amount').css('width','45px');
-    $('#id_use').css('width','100px');
-    $('#id_alpha_acid').css('width','55px');
-    $('#id_yeast_name').css('width','150px');
-    $('#id_hop_name,#id_time,#id_use,#id_alpha_acid,#id_amount').
-            css('margin-right','5px');
     well_color = $('#hop_box').css('background-color');
 
 

@@ -134,7 +134,7 @@ INSTALLED_APPS = (
     #Not sure if i need this
     #'BrewMe_index',
     # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'django.contrib.admindocs',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -165,6 +165,10 @@ LOGGING = {
         },
     }
 }
+
+#Site URL
+#Change this to change the port you are working on
+SITE_URL = 'http://66.169.77.204:8000'
 
 # Static bootstrap urls
 BOOTSTRAP_BASE_URL      = 'http://twitter.github.io/bootstrap/assets/'
