@@ -43,6 +43,7 @@ def recipe_design(request):
         my_recipe.style_id     = Style.objects.get(name = 'test')
         my_recipe.save()
 
+
         # Grain Bill creation
         for ferm in recipe_dict['fermentable']:
             my_grain                = GrainBill()
@@ -157,6 +158,7 @@ def get_recipe(request, rec_id):
             hop_form = HopForm()
             yeast_form = YeastForm()
             misc_form = MiscForm()
+            recipe_dict['parent_id'] = rec_id
             return render_to_response('fork.html', {
                 'recipe_dict'   : simplejson.dumps(recipe_dict),
                 'hop_form' : hop_form,
